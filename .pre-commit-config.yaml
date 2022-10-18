@@ -1,0 +1,43 @@
+# Config file to enable local pre-commit checks
+# Source https://pre-commit.com
+
+# Each repo url is listed, from where git clone takes code
+# Run pre-commit locally before commit to git
+
+repos: # List of repository mappings
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+    -   id: check-ast  # Confirm valid Python code
+    -   id: check-executables-have-shebangs
+    -   id: check-yaml
+    -   id: check-json
+    -   id: check-toml
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+    -   id: check-added-large-files
+    -   id: detect-private-key # Security check
+    #-   id: detect-aws-credentials # Security check, enable for AWS based projects
+    #-   id: double-quote-string-fixer # Replace double quotes with single
+    # the above string fixer conflicts with black so should not be used
+
+# Reformat code with black
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    -   id: black
+
+# Sort imports alphabetically, and automatically separated into sections and by type.
+-   repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+    -   id: isort
+        name: isort (python)
+
+# Run flake8 code linter for syntax errors, possible bugs, stylistic errors
+-   repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
+    hooks:
+    -   id: flake8
+        additional_dependencies: [flake8-docstrings]

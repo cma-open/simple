@@ -1,0 +1,25 @@
+# Env definition file for creating environment via conda
+
+name: simple-env
+channels:
+ - conda-forge
+dependencies:
+ - python=3.10
+ - iris>=3.0
+ - numpy
+ - black
+ - pre-commit
+ - humanize
+ - coverage
+ - pytest
+ - pytest-cov
+ - myst-parser
+ - sphinx
+ - sphinx_rtd_theme
+ - sphinx-argparse
+ - sphinx-gallery
+ - sphinxcontrib-mermaid
+ - numpydoc
+ - pipreqs
+ - pandas
+ - pip
