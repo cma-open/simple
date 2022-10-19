@@ -1,0 +1,73 @@
+# #####################################################################################
+# GitHub workflow action file
+# Runs all tests against the installed system on the runner
+# #####################################################################################
+
+
+# Name for workflow (also displayed on the associated badges)
+name: tests
+
+# on: controls when the action will run.
+# Triggers the workflow on push or pull request events
+# Limits run only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# Set environment variables so this workflow action is easy to re-use in other repos
+env:
+  REPO_NAME: simple
+  CONDA_ENV: simple-env # Name is set in the $ENV_FILE
+  ENV_FILE: environment.yml
+
+jobs:
+  run-tests:
+    timeout-minutes: 10 # Limit total time use of the workflow action
+    runs-on: ubuntu-latest
+    env:
+      REMOTE_TESTS: True
+    steps:
+    - uses: actions/checkout@v3 # checkout code to the runner workspace root
+    - name: Install dependencies
+      run: |
+        conda env create -f $ENV_FILE
+    - name: conda check
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        which python
+        python --version
+        conda info --envs
+    - name: Install
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip install .
+    - name: Run all tests
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        cd scripts/tests
+        chmod +x test.sh
+        ./test.sh
+    #- name: Test with coverage
+      # Re-run the tests and report test coverage
+      # Does not fail with error code if any tests fail, output is for info only
+      # The separate step is needed to ensure the job fails if there are failing tests
+      # This enables the code coverage stats to be visible
+      # via the actions workflow page on GitHub
+      #run: |
+       # source /usr/share/miniconda/etc/profile.d/conda.sh
+       # conda activate $CONDA_ENV
+       # cd scripts/tests
+       # chmod +x coverage-unit.sh
+       # ./coverage-unit.sh
+        #echo "$PWD"
+        #cd $GITHUB_WORKSPACE
+        #cd $GITHUB_WORKSPACE
+        #echo "$PWD"
+        #pytest --cov-report term-missing:skip-covered --trace --cov=$GITHUB_WORKSPACE/cmatools $GITHUB_WORKSPACE/tests/unit
+        #below call works locally via script
+        #pytest --cov-report term-missing:skip-covered --cov="${CODE_DIR}"/cmatools "${TESTS_DIR}"/unit
