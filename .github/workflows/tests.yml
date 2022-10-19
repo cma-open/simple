@@ -12,9 +12,9 @@ name: tests
 # Limits run only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 # Set environment variables so this workflow action is easy to re-use in other repos
 env:
