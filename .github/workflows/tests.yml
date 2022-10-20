@@ -19,6 +19,7 @@ on:
 # Set environment variables so this workflow action is easy to re-use in other repos
 env:
   REPO_NAME: simple
+  PACKAGE: simple # Name of package directory within repo
   CONDA_ENV: simple-env # Name is set in the $ENV_FILE
   ENV_FILE: environment.yml
 
@@ -52,22 +53,36 @@ jobs:
         cd scripts/tests
         chmod +x test.sh
         ./test.sh
-    #- name: Test with coverage
+    - name: Test with coverage
       # Re-run the tests and report test coverage
       # Does not fail with error code if any tests fail, output is for info only
       # The separate step is needed to ensure the job fails if there are failing tests
       # This enables the code coverage stats to be visible
       # via the actions workflow page on GitHub
-      #run: |
-       # source /usr/share/miniconda/etc/profile.d/conda.sh
-       # conda activate $CONDA_ENV
-       # cd scripts/tests
-       # chmod +x coverage-unit.sh
-       # ./coverage-unit.sh
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+
+        # Run tests and produce output report in xml, with coverage stats
+        pytest --cov-report xml:cobertura.xml --cov=$PACKAGE tests
+        # xml report will be automatically picked up by a workflow action
+
+
+        #pytest --cov-report term-missing:skip-covered --cov="${PACKAGE}" .
+
         #echo "$PWD"
         #cd $GITHUB_WORKSPACE
         #cd $GITHUB_WORKSPACE
         #echo "$PWD"
-        #pytest --cov-report term-missing:skip-covered --trace --cov=$GITHUB_WORKSPACE/cmatools $GITHUB_WORKSPACE/tests/unit
+        #pytest --cov-report term-missing:skip-covered --trace --cov=$GITHUB_WORKSPACE/simple $GITHUB_WORKSPACE/tests
+
         #below call works locally via script
         #pytest --cov-report term-missing:skip-covered --cov="${CODE_DIR}"/cmatools "${TESTS_DIR}"/unit
+
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        # or
+        # api-token: ${{ secrets.CODACY_API_TOKEN }}
+        coverage-reports: cobertura.xml
