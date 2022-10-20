@@ -64,7 +64,7 @@ jobs:
         conda activate $CONDA_ENV
 
         # Run tests and produce output report in xml, with coverage stats
-        pytest --cov-report xml:coverage.xml --cov=$PACKAGE tests
+        pytest --cov-report xml:coverage.xml --cov=$PACKAGE $GITHUB_WORKSPACE/tests
         echo "$PWD"
         ls
         # xml report will be automatically picked up by a workflow action
