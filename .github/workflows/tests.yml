@@ -64,7 +64,7 @@ jobs:
         conda activate $CONDA_ENV
 
         # Run tests and produce output report in xml, with coverage stats
-        pytest --cov-report xml:cobertura.xml --cov=$PACKAGE tests
+        pytest --cov-report xml:coverage.xml --cov=$PACKAGE tests
         echo "$PWD"
         ls
         # xml report will be automatically picked up by a workflow action
@@ -80,4 +80,4 @@ jobs:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
         # or
         # api-token: ${{ secrets.CODACY_API_TOKEN }}
-        coverage-reports: cobertura.xml
+        coverage-reports: coverage.xml
