@@ -21,8 +21,8 @@ TOOL = "cli-simple"
 
 # Testing note
 # cli tool is registered via entry points
-# can't be called and run via filepath (as does not use main)
-# can't be called and run via module name (as does not use main)
+# can't be called and run via filepath (does not use main)
+# can't be called and run via module name (does not use main)
 # See other d_user_interface tests for examples using these tests
 
 # TODO - update the config file !!
