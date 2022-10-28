@@ -1,1 +1,1 @@
-"""Analysis package prvoides core analysis functions to the system."""
+"""Analysis package provides core analysis functions to the system."""
