@@ -32,6 +32,7 @@ def cli_entry_point(argv=None):
 
     # Arguments in argparse can be positional or optional
     # Set the argument type and limit choices from a list
+    # Note type is set to int, to force conversion
 
     parser.add_argument("x", type=int, help="the x value", choices=[0, 1, 2, 3, 4, 5])
     parser.add_argument("y", type=int, help="the y value", choices=[0, 1, 2, 3, 4, 5])
@@ -45,10 +46,8 @@ def cli_entry_point(argv=None):
 
     parsed_args = parser.parse_args(argv)
 
-    # run analysis
-    x = parsed_args.x
-    y = parsed_args.y
-
-    result = calculate(x, y)
-    print(f"Result: {result}")
-    return result
+    # run analysis calculation using te user provides input args
+    result = calculate(parsed_args.x, parsed_args.y)
+    print(result)  # print to stdout, dont return value
+    # Note cli tools may be expected to return none or 0 for testing
+    # When developing tests for cli tools, check the use of returncode
