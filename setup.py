@@ -1,19 +1,6 @@
 """Setup for the simple package."""
 
-import warnings
-
 import setuptools
-
-# TODO check use of user warnings
-warnings.warn(
-    "Warning: once installed and used this software will write to "
-    "locations in the home directory"
-)
-warnings.warn(
-    "Warning: edit the config.ini to use project specific directory "
-    "names, if required"
-)
-warnings.warn("Info: see user documentation for more details")
 
 setuptools.setup(
     name="simple",
