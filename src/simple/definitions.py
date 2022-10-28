@@ -17,8 +17,3 @@ REPO_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Set the package name
 # TODO check r.e. take name from setup.py to minimise duplication
 PACKAGE = "simple"
-
-if __name__ == "__main__":
-    print(ROOT_DIR)
-    print(PACKAGE_DIR)
-    print(REPO_DIR)
