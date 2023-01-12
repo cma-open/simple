@@ -3,14 +3,14 @@
 from simple.prepare.prepare import add_small_constant, convert_to_string
 
 
-def duplicate(input):
+def duplicate(input_value):
     """Duplicate input values into a list."""
-    result_list = [input, input]
-    return result_list
+    input_list = [input_value, input_value]
+    return input_list
 
 
 def calculate(x, y):
-    """Sum x and y and return result."""
+    """Sum x and y, apply modifications, and return result."""
     result = x + y
     result_modified = add_small_constant(result)
     result_string = convert_to_string(result_modified)
