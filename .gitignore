@@ -1,3 +1,12 @@
+# Temp directory within repo root
+temp/
+
+# Data dir within repo
+data/
+
+# Logs dir within the repo
+logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
