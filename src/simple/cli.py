@@ -1,4 +1,6 @@
-"""Command line application - a simple analysis tool example.
+"""Command line tool - a simple analysis tool example.
+
+Takes user supplied parameters and conducts analysis, prints output to terminal.
 
 Example
 -------
@@ -46,8 +48,8 @@ def cli_entry_point(argv=None):
 
     parsed_args = parser.parse_args(argv)
 
-    # run analysis calculation using te user provides input args
+    # run analysis calculation using the user provided input args
     result = calculate(parsed_args.x, parsed_args.y)
-    print(result)  # print to stdout, dont return value
+    print(result)  # print to stdout, don't return value
     # Note cli tools may be expected to return none or 0 for testing
     # When developing tests for cli tools, check the use of returncode
