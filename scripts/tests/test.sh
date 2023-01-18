@@ -20,6 +20,10 @@ eval "$(conda shell.bash hook)"
 #conda activate ${VERSION}
 echo
 
+# ensure conda commands are accessible
+conda init bash > /dev/null 2>&1
+eval "$(conda shell.bash hook)"
+
 # activate conda env
 conda activate "simple-env"
 
