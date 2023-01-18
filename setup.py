@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="simple",
-    version="0.0.0",
+    version="2023.01",
     author="Jonathan Winn",
     author_email="jonathan.winn@metoffice.com",
     description="Training example package",
