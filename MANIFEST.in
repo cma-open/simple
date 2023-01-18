@@ -1,1 +1,2 @@
-include src/simple/config.ini
+include src/simple/*.txt
+include src/simple/*.ini
