@@ -24,6 +24,7 @@ setuptools.setup(
     # Set minimum python version to allow installation
     python_requires=">=3.10",
     # Considers all non .py files found inside the package directory as data files
+    # MUST also be specified in the MANIFEST.in file
     include_package_data=True,
     # Register command line scripts from the relevant package module
     # These are added as command line options once the system is installed
@@ -37,7 +38,18 @@ setuptools.setup(
     },
 )
 
+#######################################################################################
 # Developer and review notes
+#######################################################################################
 # This includes data files WITHIN the src package
+# PyPA recommends that any data files you wish to be accessible at run time
+# be included inside the package.
 # Check and review use of other methods if files from repo root are also needed
-# e.g. MANIFEST.in
+# Note - there are other methods to specificy data files from version control and
+# using package_data option. For now us eof MANIFEST.in is the best. Review in 1yr.
+# check conversion and use of pyproject.toml - esp editable vs user install
+# Refs
+# https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/
+# https://setuptools.pypa.io/en/latest/userguide/datafiles.html#subdirectory-for-data-files
+# https://packaging.python.org/en/latest/guides/using-manifest-in/
+# https://docs.python.org/3/library/importlib.resources.html#module-importlib.resources
