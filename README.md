@@ -34,19 +34,15 @@ Use
     -
 - commands = ....
 
-
-Today
+Todo
 - system installs and works - remove hotfixes (CA)
 - check google shell script standard - lib vs executable
 
 
 Fixes - next steps
-- restart / reset/ closed pycharm etc
-- work out why install and uninstall not working
-- add new uninstall script
-- log and print all swetup details
+- note about pip show nd pip uninstal errors
 
 
-- editable locla install = uses within repo dirs automatically
+- editable local install = uses within repo dirs automatically
 - user install requires a dir to be set in config, but will default to tilde
 -
