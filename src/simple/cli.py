@@ -8,6 +8,7 @@ Example text here including
 literal blocks::
     $ python cli.py
 """
+# TODO replace above example
 
 import argparse
 
