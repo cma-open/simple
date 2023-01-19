@@ -22,5 +22,8 @@ def test_data_resources():
 
 def test_data_resources_file_content():
     """Test that data file content can be read."""
-    data_text = files(RESOURCES).joinpath("data1.txt").read_text()
+    data_text = files(RESOURCES).joinpath("data1.txt").read_text().strip()
+    # See #19 re bug in editable vs user install, fixed by .strip()
+    if DEBUG:
+        print(data_text)
     assert data_text == "hello world"
