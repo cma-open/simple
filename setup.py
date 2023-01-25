@@ -29,11 +29,18 @@ setuptools.setup(
     # Register command line scripts from the relevant package module
     # These are added as command line options once the system is installed
     entry_points={
-        # Name the tool, link to the package function
+        # Name the command tools, link to the package functions
         "console_scripts": [
-            # Name the simple analysis command
+            # Name cli-simple command (uses argparse)
             "cli-simple=" "simple.cli:cli_entry_point",
+            # Name confirm-config command
             "confirm-config=" "simple.config.reader:main",
+            # Name create-data command (cf with options)
+            "create-data=" "simple.netcdf.data:main",
+            # Name create-data-options command (uses argparse)
+            "create-data-options=" "simple.cli:cli_data",
+            # Name clean command
+            "clean=" "simple.io.io:main",
         ]
     },
 )
