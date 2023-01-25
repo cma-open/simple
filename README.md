@@ -12,37 +12,35 @@ Repo content
 - Contains a main system processing workflow
 - Illustrates
     - Good test coverage (pytest)
-    - Good code quality
+    - Good code quality (Codacy)
     - Automated testing (GitHub workflow actions)
     - Use of conda environment
     - Simple config file use
+    - Basic log files
 
-Checkout
-- Checkout the code locally from the GitHub repo
+User instructions
 
-Config
-- Open src/simple/config.ini and set datadir and scratchdir or retain defaults
-- If any config is changed later, then re-install and run through the workflow again
+- Checkout
+    - Checkout the code locally from the GitHub repo
 
-Installation
-- scripts/conda/create-env.sh
-- scripts/install/install.sh
+- Config
+    - Open src/simple/config.ini and set datadir and scratchdir or retain defaults
+    - If any config is changed later, then re-install and run through the workflow again
 
-Use
-- workflow
-    - confirm_config: print and log config settings
-    -
+- Installation
+    - scripts/conda/create-env.sh
+    - scripts/install/install.sh
+
+- Usage
+    - workflow
+        - confirm_config: print and log config settings
+        - create_data:
+        -
 - commands = ....
 
 Todo
-- system installs and works - remove hotfixes (CA)
 - check google shell script standard - lib vs executable
 
 
 Fixes - next steps
 - note about pip show nd pip uninstal errors
-
-
-- editable local install = uses within repo dirs automatically
-- user install requires a dir to be set in config, but will default to tilde
--
