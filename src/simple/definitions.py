@@ -13,11 +13,11 @@ import os
 # repo/src/package (dev) or site-packages/package (user)
 PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Do not use refs to SRC_DIR or REPO_DIR
-# Set namespace subpackage holding resource files
-RESOURCES = "simple.resources"
 # Set the package name
 # TODO check r.e. take name from setup.py to minimise duplication
 PACKAGE = "simple"
+# Set namespace subpackage holding resource files
+RESOURCES = f"{PACKAGE}.resources"
 
 if __name__ == "__main__":
     # Execute when the module is not initialized from an import statement.
