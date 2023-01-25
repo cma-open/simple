@@ -1,8 +1,8 @@
 # Temp directory within repo root
 temp/
 
-# Data dir within repo
-data/
+# Data dir within repo - only at root, not subdirectories
+/data/
 
 # Logs dir within the repo
 logs/
