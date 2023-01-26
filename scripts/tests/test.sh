@@ -5,6 +5,7 @@
 #######################################################################################
 
 # Source code, variables from common.sh
+# Makes CODE_DIR etc available. Also sources common/common.sh
 source common.sh
 
 echo "Current working directory: ${PWD}"
@@ -20,12 +21,8 @@ eval "$(conda shell.bash hook)"
 #conda activate ${VERSION}
 echo
 
-# ensure conda commands are accessible
-conda init bash > /dev/null 2>&1
-eval "$(conda shell.bash hook)"
-
 # activate conda env
-conda activate "simple-env"
+conda activate ${ENV_NAME}
 
 # Discover and run tests on code path. Options include:
 # -v verbose flag, -r displays “short test summary info” at end of session,
