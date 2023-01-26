@@ -42,7 +42,6 @@ Todo
 
     - check google shell script standard - lib vs executable
 
+Fix next steps
 
-Fixes : next steps
-
-    - note about pip show nd pip uninstal errors
+    - note about pip show nd pip uninstall errors
