@@ -7,16 +7,16 @@ A very simple python package with a command line tool
 
 Repo content
 
-  - A working, installable python package
-  - Contains command line tools
-  - Contains a main system processing workflow
-  - Illustrates
-    - Good test coverage (pytest)
-    - Good code quality (Codacy)
-    - Automated testing (GitHub workflow actions)
-    - Use of conda environment
-    - Simple config file use
-    - Basic log files
+    - A working, installable python package
+    - Contains command line tools
+    - Contains a main system processing workflow
+    - Illustrates
+        - Good test coverage (pytest)
+        - Good code quality (Codacy)
+        - Automated testing (GitHub workflow actions)
+        - Use of conda environment
+        - Simple config file use
+        - Basic log files
 
 User instructions
 
