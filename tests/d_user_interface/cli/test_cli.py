@@ -89,7 +89,7 @@ def test_cli_with_user_args_raises_errors():
 def test_cli_with_user_args_raises_errors_message():
     """Test the command raises errors with incorrect user args."""
     # x value too large, expected to cause error
-    out = subprocess.run(
+    out = subprocess.run(  # nosec  # bandit ignore
         [
             TOOL,
             "1000",
