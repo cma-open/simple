@@ -1,6 +1,20 @@
 """Setup for the simple package."""
 
+import os
+
 import setuptools
+
+# Workaround to ensure full install with tests can be tested via GitHub actions
+# Normal, local, user install does not include tests directory
+try:
+    REMOTE_TESTS = os.environ["REMOTE_TESTS"]
+    exclusion = None
+except KeyError:
+    exclusion = ["*tests.*", "*tests"]
+
+print("----------")
+print(exclusion)
+print("---------")
 
 setuptools.setup(
     name="simple",
@@ -14,7 +28,7 @@ setuptools.setup(
     # Legacy / Maintenance note:
     # As the package dir is  specified, then don't need to also exclude the tests here
     # However retained as a failsafe in case future tests are added in the main package
-    packages=setuptools.find_packages(where="src", exclude=["*tests.*", "*tests"]),
+    packages=setuptools.find_packages(where="src", exclude=exclusion),
     license="BSD",
     classifiers=[
         "Programming Language :: Python :: 3",
