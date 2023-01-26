@@ -20,10 +20,12 @@ def create_files(tmp_path):
 def test_clean_directory(tmp_path, create_files):
     """Test clean_directory function."""
     print("Files exist:")
-    [print(file) for file in tmp_path.iterdir()]
+    files = [file for file in tmp_path.iterdir()]
+    print(*files, sep="\n")
     # clean directory
     clean_directory(tmp_path, FILES)
     contains_files = any(tmp_path.iterdir())  # False if empty
     assert contains_files is False
     print("Files in tmp_path:")
-    [print(file) for file in tmp_path.iterdir()]
+    files = [file for file in tmp_path.iterdir()]
+    print(*files, sep="\n")
