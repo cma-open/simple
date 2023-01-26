@@ -1,10 +1,9 @@
 """Common functions for the data subpackage."""
 
 import pandas as pd
-import pytest
 
 
-@pytest.fixture
+#  @pytest.fixture
 def make_reference_dataframe() -> pd.DataFrame:
     """Return a reference data frame for use in tests."""
     # data as a list of lists of numbers
@@ -47,5 +46,4 @@ def make_reference_dataframe() -> pd.DataFrame:
     ]
     # header values
     columns = ["time", "latitude", "longitude", "temperature", "uncertainty"]
-
     return pd.DataFrame(data=data, columns=columns)
