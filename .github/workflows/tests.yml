@@ -92,6 +92,8 @@ jobs:
         pip install . -v
     - name: Check install
       run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
         pip show $PACKAGE
     - name: Run all tests to verify working from full user install
       run: |
