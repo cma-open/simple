@@ -49,7 +49,7 @@ def test_cli_with_user_args():
 
     Allows verification that CLI tool is correctly installed (via setup.py)
     """
-    out = subprocess.run(
+    out = subprocess.run(  # nosec  # bandit ignore
         [
             TOOL,
             "1",
@@ -74,7 +74,7 @@ def test_cli_with_user_args_raises_errors():
     """Test the command raises errors with incorrect user args."""
     with pytest.raises(subprocess.CalledProcessError):
         # x value too large, expected to cause error
-        subprocess.run(
+        subprocess.run(  # nosec  # bandit ignore
             [
                 TOOL,
                 "1000",
