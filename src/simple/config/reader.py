@@ -62,29 +62,29 @@ def return_outputs():
     return outputs_path
 
 
-def validate_dir(dir):
+def validate_dir(dir_path):
     """Validate directory paths."""
     pass
 
 
-def setup_directories(dir):
+def setup_directories(dir_path):
     """Create system directory structure."""
     # read the config file into the configparser object.
     config.read(configfile)
     # get subdirs to create
     inputs_dir = config.get("DATADIR", "INPUTS")
     outputs_dir = config.get("DATADIR", "OUTPUTS")
-    (Path(dir) / inputs_dir).mkdir(parents=True, exist_ok=True)
-    (Path(dir) / outputs_dir).mkdir(parents=True, exist_ok=True)
-    (Path(dir) / "logs").mkdir(parents=True, exist_ok=True)
+    (Path(dir_path) / inputs_dir).mkdir(parents=True, exist_ok=True)
+    (Path(dir_path) / outputs_dir).mkdir(parents=True, exist_ok=True)
+    (Path(dir_path) / "logs").mkdir(parents=True, exist_ok=True)
 
 
-def log_config(dir):
+def log_config(dir_path):
     """Log system config settings to the config log file."""
     # read the config file into the configparser object.
     config.read(configfile)
     # create log filename
-    log_for_config = Path(dir) / config.get("LOGS", "CONFIG")
+    log_for_config = Path(dir_path) / config.get("LOGS", "CONFIG")
     # Set format for log message construction
     log_format = "%(asctime)s %(levelname)s %(message)s"
     logging.basicConfig(
