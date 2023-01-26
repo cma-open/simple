@@ -20,27 +20,29 @@ Repo content
 
 User instructions
 
-  - Checkout
-    - Checkout the code locally from the GitHub repo
+    - Checkout
+        - Checkout the code locally from the GitHub repo
 
-  - Config
-    - Open src/simple/config.ini and set datadir and scratchdir or retain defaults
-    - If any config is changed later, then re-install and run through the workflow again
+    - Config
+        - Open src/simple/config.ini and set datadir and scratchdir or retain defaults
+        - If any config is changed later, then re-install and run through the workflow again
 
-  - Installation
-    - scripts/conda/create-env.sh
-    - scripts/install/install.sh
+    - Installation
+        - scripts/conda/create-env.sh
+        - scripts/install/install.sh
 
-  - Usage
-    - workflow
-      - confirm_config: print and log config settings
-      - create-data:
-      - create-data-options:
-      - clean: remove data files
+    - Usage
+        - workflow
+            - confirm_config: print and log config settings
+            - create-data:
+            - create-data-options:
+            - clean: remove data files
 
 Todo
-  - check google shell script standard - lib vs executable
+
+    - check google shell script standard - lib vs executable
 
 
-Fixes - next steps
-  - note about pip show nd pip uninstal errors
+Fixes : next steps
+
+    - note about pip show nd pip uninstal errors
