@@ -7,10 +7,10 @@ A very simple python package with a command line tool
 
 Repo content
 
-- A working, installable python package
-- Contains command line tools
-- Contains a main system processing workflow
-- Illustrates
+  - A working, installable python package
+  - Contains command line tools
+  - Contains a main system processing workflow
+  - Illustrates
     - Good test coverage (pytest)
     - Good code quality (Codacy)
     - Automated testing (GitHub workflow actions)
@@ -20,27 +20,27 @@ Repo content
 
 User instructions
 
-- Checkout
+  - Checkout
     - Checkout the code locally from the GitHub repo
 
-- Config
+  - Config
     - Open src/simple/config.ini and set datadir and scratchdir or retain defaults
     - If any config is changed later, then re-install and run through the workflow again
 
-- Installation
+  - Installation
     - scripts/conda/create-env.sh
     - scripts/install/install.sh
 
-- Usage
+  - Usage
     - workflow
-        - confirm_config: print and log config settings
-        - create_data:
-        -
-- commands = ....
+      - confirm_config: print and log config settings
+      - create-data:
+      - create-data-options:
+      - clean: remove data files
 
 Todo
-- check google shell script standard - lib vs executable
+  - check google shell script standard - lib vs executable
 
 
 Fixes - next steps
-- note about pip show nd pip uninstal errors
+  - note about pip show nd pip uninstal errors
