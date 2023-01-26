@@ -58,7 +58,7 @@ def test_cli_with_user_args():
         check=True,
         capture_output=True,
         text=True,
-    )
+    )  # nosec  # bandit ignore
     if DEBUG:
         # print to show CompletedProcess object and args, stdout, stderr, etc
         print(out)
@@ -83,7 +83,7 @@ def test_cli_with_user_args_raises_errors():
             check=True,
             capture_output=True,
             text=True,
-        )
+        )  # nosec  # bandit ignore
 
 
 def test_cli_with_user_args_raises_errors_message():
@@ -98,7 +98,7 @@ def test_cli_with_user_args_raises_errors_message():
         check=False,
         capture_output=True,
         text=True,
-    )
+    )  # nosec  # bandit ignore
     # note check=False to prevent error code
     print(out.stderr)
     message = out.stderr
