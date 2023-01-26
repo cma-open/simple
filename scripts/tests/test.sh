@@ -22,7 +22,7 @@ eval "$(conda shell.bash hook)"
 echo
 
 # activate conda env
-conda activate ${ENV_NAME}
+conda activate "${ENV_NAME}"
 
 # Discover and run tests on code path. Options include:
 # -v verbose flag, -r displays “short test summary info” at end of session,

@@ -15,7 +15,7 @@ conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 
 # activate conda env
-conda activate ${ENV_NAME}
+conda activate "${ENV_NAME}"
 
 # run tests with coverage output
 pytest --cov-config="${CODE_DIR}/.coveragerc"  \
