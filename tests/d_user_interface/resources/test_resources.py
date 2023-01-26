@@ -11,7 +11,7 @@ def test_data_resources():
     """Test that package resources can be accessed via namespace."""
     package_resources = files(RESOURCES)
     assert package_resources.is_dir()
-    expected_filenames = ["data1.txt", "data2.data"]
+    expected_filenames = ["data1.txt", "data2.csv"]
     for file in package_resources.iterdir():
         if DEBUG:
             print(file)
