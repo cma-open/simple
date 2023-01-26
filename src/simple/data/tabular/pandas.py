@@ -7,12 +7,10 @@ from pathlib import Path
 from simple.data.common import make_reference_dataframe
 
 
-def make_reference_file():
+def make_reference_file(out_path):
     """Create reference file on disk."""
-    # Set output location
-    test_dir = Path(__file__).parent
-    filename = test_dir / "test_data" / "csv_data.data"
-
+    # Set output full pth and filename
+    filename = Path(out_path) / "csv_data.csv"
     # Write CSV file to disk
     df = make_reference_dataframe()
     df.to_csv(filename, index=False)
