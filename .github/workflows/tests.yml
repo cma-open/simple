@@ -22,6 +22,7 @@ env:
   PACKAGE: simple # Name of package directory within repo
   CONDA_ENV: simple-env # Name is set in the $ENV_FILE
   ENV_FILE: environment.yml
+  REMOTE_TESTS: True # To configure test behaviour
 
 jobs:
   run-tests:
@@ -47,7 +48,7 @@ jobs:
         conda activate $CONDA_ENV
         # note the behaviour of full vs editable install here
         # note impact of package structure (tests dir)
-        pip install -e .
+        pip install -e . -v
     - name: Run all tests
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
@@ -79,3 +80,22 @@ jobs:
         # or
         # api-token: ${{ secrets.CODACY_API_TOKEN }}
         coverage-reports: coverage.xml
+    - name: Uninstall the package
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip uninstall $PACKAGE -v
+    - name: Install the package in user mode
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip install . -v
+    - name: Check install
+      run: |
+        pip show $PACKAGE
+    - name: Run all tests to verify working from full user install
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        cd tests
+        pytest
