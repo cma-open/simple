@@ -19,8 +19,8 @@ def check_install_status(display=None):
         return "User"
 
 
-def clean_directory(dir, files):
+def clean_directory(dir_path, files):
     """Remove specified list of files from named directory."""
     for file in files:
-        filepath = Path(dir) / file
+        filepath = Path(dir_path) / file
         filepath.unlink(missing_ok=True)
