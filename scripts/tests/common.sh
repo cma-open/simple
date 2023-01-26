@@ -8,13 +8,18 @@
 conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 
-# activate conda env
-conda activate "simple-env"
-
 # Set python package root dir as script constant
+# Used by the other test scripts
 readonly CODE_DIR="$(dirname "$(dirname "${PWD}")")"
-readonly PACKAGE="simple"
+
+# Source variables from common
+source "${CODE_DIR}/scripts/common/common.sh"
+
+# activate conda env
+conda activate ${ENV_NAME}
+
 # Set coverage config file as script constant
+# Set here, rather than common/common, as relative to CODE_DIR
 readonly COV_CONFIG="${CODE_DIR}"/.coveragerc
 
 # Get location of the installed package
@@ -24,8 +29,8 @@ COMMAND=("import inspect; import pathlib; import ${PACKAGE}; \
 package = pathlib.Path(inspect.getfile(${PACKAGE})); \
 print(str(package.parent)) ")
 
+# Set package dir name
 PACKAGE_DIR=$(python -c "${COMMAND}")
-
 
 # Set tests directory
 readonly TESTS_DIR="${CODE_DIR}"/tests

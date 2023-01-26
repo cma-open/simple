@@ -4,7 +4,8 @@
 # Script to run system tests - report coverage to terminal
 #######################################################################################
 
-# Source code, variables from common.sh
+# Source code, variables from tests/common.sh
+# Makes CODE_DIR etc available. Also sources common/common.sh
 source common.sh
 
 echo "Current working directory: ${PWD}"
@@ -14,7 +15,7 @@ conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 
 # activate conda env
-conda activate "simple-env"
+conda activate "${ENV_NAME}"
 
 # run tests with coverage output
 pytest --cov-config="${CODE_DIR}/.coveragerc"  \
