@@ -99,5 +99,6 @@ jobs:
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
-        pytest --pyargs simple.tests
+        # run pytest against installed package
+        pytest --pyargs simple
         # --tb=long -vrA
