@@ -6,10 +6,15 @@ has been installed.
 
 import pytest
 
+from simple.common.common import check_install_status
+
 
 def pytest_report_header(config):
     """Add text information to test report header."""
-    return "Extra info: example"
+    return [
+        "Extra info: example",
+        f"Tests run from install type: {check_install_status()}",
+    ]
 
 
 def pytest_collectreport(report):
