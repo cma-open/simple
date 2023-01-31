@@ -1,20 +1,6 @@
 """Setup for the simple package."""
 
-import os
-
 import setuptools
-
-# Workaround to ensure full install with tests can be tested via GitHub actions
-# Normal, local, user install does not include tests directory
-try:
-    REMOTE_TESTS = os.environ["REMOTE_TESTS"]
-    exclusion = None
-except KeyError:
-    exclusion = ["*tests.*", "*tests"]
-
-print("----------")
-print(exclusion)
-print("---------")
 
 setuptools.setup(
     name="simple",
@@ -23,12 +9,11 @@ setuptools.setup(
     author_email="jonathan.winn@metoffice.com",
     description="Training example package",
     url="https://github.com/cma-open/simple",
-    # find and install all packages
-    package_dir={"": "src"},
-    # Legacy / Maintenance note:
-    # As the package dir is  specified, then don't need to also exclude the tests here
-    # However retained as a failsafe in case future tests are added in the main package
-    packages=setuptools.find_packages(where="src", exclude=exclusion),
+    # Set package dir to identify package(s) to install, find within src dir
+    packages=setuptools.find_packages(where="src", exclude=["*tests.*", "*tests"]),
+    package_dir={
+        "": "src",  # install system package from root, then src directory
+    },
     license="BSD",
     classifiers=[
         "Programming Language :: Python :: 3",
