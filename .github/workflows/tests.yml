@@ -47,9 +47,9 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         # note the behaviour of full vs editable install here
-        # note impact of package structure (tests dir)
+        # note impact of package structure (src, tests, etc.)
         pip install -e . -v
-    - name: Run all tests
+    - name: Run all tests (local editable install)
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
@@ -85,7 +85,7 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         pip uninstall -y $PACKAGE -v
-    - name: Install the package in user mode
+    - name: Install the package in user mode (site-packages)
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
@@ -95,10 +95,13 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         pip show $PACKAGE
-    - name: Run all tests to verify working from full user install
+    - name: Run all tests (verify full user install)
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         # run pytest against installed package
-        pytest --pyargs simple
-        # --tb=long -vrA
+                cd scripts/tests
+        chmod +x test.sh
+        ./test.sh
+        # Step used as an example to show testing of installed package
+        # vs local editable code
