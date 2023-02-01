@@ -24,4 +24,8 @@ dependencies:
  - numpydoc
  - pipreqs
  - pandas
+ - geopandas
+ - setuptools>=45
+ - setuptools_scm>=6.2
+ - calver  # CalVer package versioning
  - pip
