@@ -16,12 +16,6 @@ echo "Current working directory: ${PWD}"
 conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 
-# TODO revisit this later. name env by current version, so env is tied to code
-# source - environment version to name the current conda environment to be used
-#source "${dir}/VERSION"
-#echo "Conda env version: ${VERSION}"
-#conda activate ${VERSION}
-
 # activate conda env
 conda activate "${ENV_NAME}"
 
