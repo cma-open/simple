@@ -28,9 +28,9 @@ while true; do
           cd ../..
           pwd
           rm -rf build
-          rm -rf *.egg-info
+          rm -rf -- *.egg-info
           cd src
-          rm -rf *.egg-info
+          rm -rf -- *.egg-info
           break;;
         [Nn]* )
           echo "---"
