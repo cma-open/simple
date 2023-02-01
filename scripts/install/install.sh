@@ -34,7 +34,7 @@ while true; do
           echo "Installing - development mode";
           cd ../..
           pwd
-          pip install -e .
+          pip install -e . -v
           break;;
         [Nn]* )
           echo "---"
@@ -47,7 +47,7 @@ while true; do
                     echo "Installing system for end use";
                     cd ../..
                     pwd
-                    pip install .
+                    pip install . -v
                     break 2;;
                     # break from both nested loops
                   [Nn]* )

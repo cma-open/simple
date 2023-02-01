@@ -35,10 +35,7 @@ PACKAGE_DIR=$(python -c "${COMMAND}")
 # Set tests directory
 readonly TESTS_DIR="${CODE_DIR}"/tests
 
-echo " ---- * ----"
 echo "Running system tests with pytest"
-echo "Package: ${PACKAGE}"
-echo "Script source package root directory: ${CODE_DIR}"
 echo "Installed package root directory: ${PACKAGE_DIR}"
 echo "Script tests directory: ${TESTS_DIR}"
 echo "Coverage config file: ${COV_CONFIG}"

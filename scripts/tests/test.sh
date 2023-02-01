@@ -2,6 +2,8 @@
 
 #######################################################################################
 # Script to run all system tests
+# Invoking tests via pytest
+# Called imported code will differ if local editable vs user install
 #######################################################################################
 
 # Source code, variables from common.sh
@@ -19,7 +21,6 @@ eval "$(conda shell.bash hook)"
 #source "${dir}/VERSION"
 #echo "Conda env version: ${VERSION}"
 #conda activate ${VERSION}
-echo
 
 # activate conda env
 conda activate "${ENV_NAME}"

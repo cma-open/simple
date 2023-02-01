@@ -22,6 +22,7 @@ env:
   PACKAGE: simple # Name of package directory within repo
   CONDA_ENV: simple-env # Name is set in the $ENV_FILE
   ENV_FILE: environment.yml
+  REMOTE_TESTS: True # To configure test behaviour
 
 jobs:
   run-tests:
@@ -46,9 +47,9 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         # note the behaviour of full vs editable install here
-        # note impact of package structure (tests dir)
-        pip install -e .
-    - name: Run all tests
+        # note impact of package structure (src, tests, etc.)
+        pip install -e . -v
+    - name: Run all tests (local editable install)
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
@@ -79,3 +80,28 @@ jobs:
         # or
         # api-token: ${{ secrets.CODACY_API_TOKEN }}
         coverage-reports: coverage.xml
+    - name: Uninstall the package
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip uninstall -y $PACKAGE -v
+    - name: Install the package in user mode (site-packages)
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip install . -v
+    - name: Check install
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        pip show $PACKAGE
+    - name: Run all tests (verify full user install)
+      run: |
+        source /usr/share/miniconda/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV
+        # run pytest against installed package
+                cd scripts/tests
+        chmod +x test.sh
+        ./test.sh
+        # Step used as an example to show testing of installed package
+        # vs local editable code
