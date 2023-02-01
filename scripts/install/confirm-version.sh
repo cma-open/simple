@@ -14,6 +14,6 @@ conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 conda activate  "${ENV_NAME}"
 
-echo $CODE_DIR
-cd ${CODE_DIR}
+echo "${CODE_DIR}"
+cd ""${CODE_DIR}"
 python setup.py --version
