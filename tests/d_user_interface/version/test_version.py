@@ -9,7 +9,6 @@ try:
 except PackageNotFoundError:
     # package is not installed
     __version__ = "unknown"
-    pass
 
 
 def test_installed_version():
