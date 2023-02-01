@@ -1,6 +1,9 @@
 # Temp directory within repo root
 temp/
 
+# _version file created by setuptools_scm
+*_version.py
+
 # Data dir within repo - only at root, not subdirectories
 /data/
 
