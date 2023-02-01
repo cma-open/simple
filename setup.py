@@ -42,6 +42,9 @@ setuptools.setup(
             "clean=" "simple.io.io:main",
         ]
     },
+    # TODO note deprecated - monitor, review, move later to use pyproject.toml
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
 )
 
 #######################################################################################
