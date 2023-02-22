@@ -1,12 +1,13 @@
 """Common system functions."""
 
-import importlib
+from importlib.util import find_spec
 from pathlib import Path
 
 
 def check_install_status(display=None):
     """Check if system is installed as user or editable develop install."""
-    spec = importlib.util.find_spec("simple")
+    # Note - designed for src package structure
+    spec = find_spec("simple")
     test_source = "src" in spec.origin
     test_site_packages = "site-packages" in spec.origin
     if test_source:
@@ -17,6 +18,8 @@ def check_install_status(display=None):
         if display:
             print(f"User install into site-packages at: {spec.origin}")
         return "User"
+    else:
+        return "Unknown path or not installed"
 
 
 def clean_directory(dir_path, files):
