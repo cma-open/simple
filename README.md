@@ -57,3 +57,8 @@ Todo
 Fix next steps
 
     - note about pip show nd pip uninstall errors
+
+Code review and system architecture
+
+    - docstrings are added to tests, against convention, to aid display via sphinx
+    - tests are not always realistic, the system is over-tested as a training example
