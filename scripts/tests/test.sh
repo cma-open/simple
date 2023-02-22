@@ -9,21 +9,14 @@
 # Source code, variables from common.sh
 # Makes CODE_DIR etc available. Also sources common/common.sh
 source common.sh
-
 echo "Current working directory: ${PWD}"
-
-# ensure conda commands are accessible
-conda init bash > /dev/null 2>&1
-eval "$(conda shell.bash hook)"
-
-# activate conda env
-conda activate "${ENV_NAME}"
-
 # Discover and run tests on code path. Options include:
 # -v verbose flag, -r displays “short test summary info” at end of session,
 # -A lists all info
 # --tb traceback print mode (auto/long/short/line/native/no)., e.g. --tb=long
-pytest --tb=long -vrA  "${TESTS_DIR}"
+echo "Move to test dir and run pytest: ${TESTS_DIR}"
+cd ${TESTS_DIR}
+pytest --tb=long -vrA
 
 #######################################################################################
 # Code review and system context notes
