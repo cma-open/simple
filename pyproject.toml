@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 #  keyword arguments to be supplied to get_version().
-write_to = "src/simple/_version.py"
+write_to = "src/simple/_version.py"  # autogenerate version file
 
 # Set option pytest settings. Commented out for now.
 # [tool.pytest.ini_options]
