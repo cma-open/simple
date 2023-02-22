@@ -33,23 +33,18 @@ def cli_entry_point(argv=None):
         epilog="  ---  ",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-
     # Arguments in argparse can be positional or optional
     # Set the argument type and limit choices from a list
     # Note type is set to int, to force conversion
-
     parser.add_argument("x", type=int, help="the x value", choices=[0, 1, 2, 3, 4, 5])
     parser.add_argument("y", type=int, help="the y value", choices=[0, 1, 2, 3, 4, 5])
-
     parser.add_argument(
         "--version",
         action="version",  # Prints version information and exits when invoked
         help="Display the version of the cli tool",
         version=f"{parser.prog} {pkg_version}",
     )
-
     parsed_args = parser.parse_args(argv)
-
     # run analysis calculation using the user provided input args
     result = calculate(parsed_args.x, parsed_args.y)
     print(result)  # print to stdout, don't return value
@@ -66,20 +61,15 @@ def cli_data(argv=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     # Arguments in argparse can be positional or optional
-    # Set the argument type and limit choices from a list
-    # Note type is set to int, to force conversion
-
     parser.add_argument(
         "--verbose", action="store_true", help="Print progress and data info to stdout"
     )
-
     parser.add_argument(
         "--version",
         action="version",  # Prints version information and exits when invoked
         help="Display the version of the cli tool",
         version=f"{parser.prog} {pkg_version}",
     )
-
     parsed_args = parser.parse_args(argv)
     # run using the user provided input args
     main(debug=parsed_args.verbose)
