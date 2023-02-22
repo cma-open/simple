@@ -3,11 +3,13 @@
 from importlib.util import find_spec
 from pathlib import Path
 
+from simple.definitions import PACKAGE
+
 
 def check_install_status(display=None):
     """Check if system is installed as user or editable develop install."""
     # Note - designed for src package structure
-    spec = find_spec("simple")
+    spec = find_spec(PACKAGE)
     test_source = "src" in spec.origin
     test_site_packages = "site-packages" in spec.origin
     if test_source:
