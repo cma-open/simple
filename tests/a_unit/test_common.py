@@ -8,6 +8,7 @@ import pytest
 from simple.common.common import check_install_status, clean_directory
 
 # List of data files generated and used within the system.
+# TODO move to use single source of FILES
 FILES = ["test.nc", "other.nc", "more.txt"]
 
 DEBUG = False
