@@ -2,9 +2,7 @@
 
 [project]
 name = "simple"
-# version = "0.0.1"  # Remove any existing version parameter.
 dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
-
 
 [build-system]
 requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
@@ -14,6 +12,7 @@ build-backend = "setuptools.build_meta"
 #  keyword arguments to be supplied to get_version().
 write_to = "src/simple/_version.py"
 
+# Set option pytest settings. Commented out for now.
 # [tool.pytest.ini_options]
 # addopts = "--tb=long -vrA" # verbose output, displays short test summary info and includes traceback
 
