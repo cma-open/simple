@@ -13,6 +13,9 @@ Repo content
     - Illustrates
         - Good test coverage (pytest)
         - Good code quality (Codacy)
+        - Code standards and style
+            - black
+            - PEP8
         - Automated testing (GitHub workflow actions)
         - Use of conda environment
         - Simple config file use (WIP)
@@ -56,9 +59,11 @@ Todo
 
 Fix next steps
 
-    - note about pip show nd pip uninstall errors
+    - note about pip show and pip uninstall errors
 
 Code review and system architecture
 
     - docstrings are added to tests, against convention, to aid display via sphinx
     - tests are not always realistic, the system is over-tested as a training example
+
+Logging strategy

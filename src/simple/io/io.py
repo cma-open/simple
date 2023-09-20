@@ -3,10 +3,10 @@
 from pathlib import Path
 
 from simple.common.common import clean_directory
-from simple.config.reader import read_ini, return_outputs
+from simple.config.reader import return_datadir, return_outputs
 
 # Get current datadir and outputs from config
-DATADIR = read_ini()
+DATADIR = return_datadir()
 OUTPUTS = Path(DATADIR) / return_outputs()
 
 # List of data files generated and used within the system.

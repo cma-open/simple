@@ -1,1 +1,1 @@
-"""System tests, ordered by test type."""
+"""User interface tests."""
