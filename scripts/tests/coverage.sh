@@ -11,7 +11,7 @@ echo "Current working directory: ${PWD}"
 echo "Move to test dir and run pytest with coverage: ${TESTS_DIR}"
 echo "Run coverage against package name: ${PACKAGE}"
 
-cd ${TESTS_DIR}
+cd "${TESTS_DIR}"
 
 # TODO check install vs dev test coverage reports
 # run tests with coverage output

@@ -23,7 +23,9 @@ def test_demo_system_log():
     # Confirm the directory was emptied
     assert any(DEMO_DIR.iterdir()) is False
     log_main = str(PACKAGE_DIR / "logging" / "log.py")
-    output = subprocess.run(["python", log_main], capture_output=True, text=True)
+    output = subprocess.run(
+        ["python", log_main], capture_output=True, text=True
+    )  # nosec
     test_config_log_file = DEMO_DIR / "demo_config.log"
     test_system_log_file = DEMO_DIR / "demo_system.log"
     # Test file was created
