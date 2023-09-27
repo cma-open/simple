@@ -13,7 +13,7 @@ def test_cli_entry_point(capsys):
     # Set user inputs
     argv = ["2", "2"]
     # Run function with user inputs
-    output = cli_entry_point(argv=argv)
+    output = cli_entry_point(argv=argv)  # pylint: disable=E1111
     # Expect function to return none
     assert output is None
     # Check stdout output
