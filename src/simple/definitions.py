@@ -9,9 +9,7 @@ from importlib.resources import files
 from pathlib import Path
 
 # Set the package name
-# TODO check r.e. take name from setup.py to minimise duplication - check after toml
-# TODO take name from package
-PACKAGE = "simple"
+PACKAGE = __package__
 # TODO refactor to give full path or as new RESORCES_DIR
 # Set namespace subpackage holding resource files
 RESOURCES = f"{PACKAGE}.resources"
