@@ -16,7 +16,7 @@ echo "Current working directory: ${PWD}"
 # --tb traceback print mode (auto/long/short/line/native/no)., e.g. --tb=long
 echo "Move to test dir and run pytest: ${TESTS_DIR}"
 cd "${TESTS_DIR}"
-pytest --tb=long -vvrf
+pytest --tb=long -vvvrf
 
 #######################################################################################
 # Code review and system context notes
