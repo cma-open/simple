@@ -16,7 +16,6 @@ echo
 conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 conda activate  "${ENV_NAME}"
-sleep 2
 
 # Require the user to confirm
 while true; do

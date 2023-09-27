@@ -6,6 +6,8 @@
 
 # Set python package code dir as script constant (relative to this script)
 readonly CODE_DIR="$(dirname "$(dirname "${PWD}")")"
+# Source variables from common
+source "${CODE_DIR}/scripts/common/common.sh"
 
 echo "Activating the conda environment: ${ENV_NAME}"
 echo
@@ -14,6 +16,5 @@ conda init bash > /dev/null 2>&1
 eval "$(conda shell.bash hook)"
 conda activate  "${ENV_NAME}"
 
-echo "${CODE_DIR}"
-cd "${CODE_DIR}"
-python setup.py --version
+# Show current version
+pip show "simple" | grep Version
