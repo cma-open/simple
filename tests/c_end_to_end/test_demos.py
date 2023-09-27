@@ -11,33 +11,33 @@
 
 import subprocess  # nosec  # bandit ignore
 
-from simple.definitions import DEMO_DIR, PACKAGE_DIR
+from simple.definitions import DEMO_TEMP_DIR, PACKAGE_DIR
 
 
 def test_demo_system_log():
-    """Test the demo for the system log."""
-    # Remove any existing demo log files
-    demo_files = list(DEMO_DIR.iterdir())
+    """Test the demo_temp for the system log."""
+    # Remove any existing demo_temp log files
+    demo_files = list(DEMO_TEMP_DIR.iterdir())
     for demo_file in demo_files:
         demo_file.unlink(missing_ok=True)
     # Confirm the directory was emptied
-    assert any(DEMO_DIR.iterdir()) is False
+    assert any(DEMO_TEMP_DIR.iterdir()) is False
     log_main = str(PACKAGE_DIR / "logging" / "log.py")
     output = subprocess.run(
         ["python", log_main], capture_output=True, text=True
     )  # nosec
-    test_config_log_file = DEMO_DIR / "demo_config.log"
-    test_system_log_file = DEMO_DIR / "demo_system.log"
+    test_config_log_file = DEMO_TEMP_DIR / "demo_config.log"
+    test_system_log_file = DEMO_TEMP_DIR / "demo_system.log"
     # Test file was created
     assert test_config_log_file.is_file()
     assert test_system_log_file.is_file()
     # Check console log output is as expected
     expected = (
-        "SystemLog :: INFO     "
-        ":: System demo                        \n"
+        "SystemLog :: INFO     :: System demo_temp                   \n"
         "SystemLog :: WARNING  :: System warning                     \n"
     )
     assert output.stderr == expected
 
     # TODO expand tests to also read log file content on disk
-    # TODO double check any option to mock out demo dir via subprocess, not possible?
+    # TODO double check any option to mock out demo_temp dir
+    #  e.g. via subprocess, not possible?
