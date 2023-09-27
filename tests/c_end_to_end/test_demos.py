@@ -16,19 +16,28 @@ from simple.definitions import DEMO_TEMP_DIR, PACKAGE_DIR
 
 def test_demo_system_log():
     """Test the demo_temp for the system log."""
-    # Remove any existing demo_temp log files
-    demo_files = list(DEMO_TEMP_DIR.iterdir())
-    for demo_file in demo_files:
-        demo_file.unlink(missing_ok=True)
-    # Confirm the directory was emptied
-    assert any(DEMO_TEMP_DIR.iterdir()) is False
+    # Tests may run in situation where directory exists or does not exist
+    # Therefore deal with both cases
+    # If directory already exists then empty it
+    if DEMO_TEMP_DIR.is_dir():
+        # Remove any existing demo_temp log files
+        demo_files = list(DEMO_TEMP_DIR.iterdir())
+        for demo_file in demo_files:
+            demo_file.unlink(missing_ok=True)
+        # Confirm the directory was emptied
+        assert any(DEMO_TEMP_DIR.iterdir()) is False
+    # Create dir if it does not yet exist
+    DEMO_TEMP_DIR.mkdir(exist_ok=True)
+    # Set the path to the logging module
     log_main = str(PACKAGE_DIR / "logging" / "log.py")
+    # Run the logging module to run the demos
     output = subprocess.run(  # nosec
         ["python", log_main], capture_output=True, text=True
     )  # nosec
+    # Get expected output log names
     test_config_log_file = DEMO_TEMP_DIR / "demo_config.log"
     test_system_log_file = DEMO_TEMP_DIR / "demo_system.log"
-    # Test file was created
+    # Test log files were created
     assert test_config_log_file.is_file()
     assert test_system_log_file.is_file()
     # Check console log output is as expected
