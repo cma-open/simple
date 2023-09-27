@@ -326,5 +326,3 @@ def main() -> None:
     # Log system settings to config log file under logs dir as set in config.ini
     log = log_config(return_logs_dir())
     logger.info(f"""Config logged at {log} """)
-
-    # Note - called via CLI confirm-config, see setup.py

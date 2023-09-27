@@ -1,16 +1,66 @@
 # pyproject.toml
 
-[project]
-name = "simple"
-dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
+# This package no longer uses setup.or or setup.cfg
 
 [build-system]
-requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "simple"
+authors = [
+    {name = "Jonathan Winn"},
+    #{name = "Jonathan Winn", email = "N/A"},
+]
+description = "A simple python package with command line tools and test examples."
+readme = "README.md"
+requires-python = ">=3.10"
+#license = {text = "BSD-3-Clause"}
+license = {file = "LICENSE"}
+dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
+
+# TODO - review later
+#[project.urls]
+#Homepage = "https://example.com"
+#Documentation = "https://readthedocs.org"
+#Repository = "https://github.com/cma-open/simple"
+#Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+
+
+# TODO - to review later
+#[project.optional-dependencies]
+#pdf = ["ReportLab>=1.2", "RXP"]
+#rest = ["docutils>=0.3", "pack ==1.1, ==1.3"]
+
+# Set all command line scripts
+# These are added as command line options once the system is installed
+[project.scripts]
+my-script = "my_package.module:function"
+# Name cli-simple command (uses argparse)
+cli-simple  = "simple.cli:cli_entry_point"
+# Name confirm-config command
+confirm-config = "simple.config.reader:main"
+# Name create-data command (cf with options)
+create-data = "simple.netcdf.data:main"
+# Name create-data-options command (uses argparse)
+create-data-options = "simple.cli:cli_data"
+# Name clean command
+clean = "simple.io.io:main"
+# Name demo_temp command
+demo = "simple.demos.demos:demo_logs"
+
 
 [tool.setuptools_scm]
 #  keyword arguments to be supplied to get_version().
-write_to = "src/simple/_version.py"  # autogenerate version file
+# autogenerate version file
+version_file = "src/simple/_version.py"
+# as a default include-package-data = true
+# CalVer date versioning
+version_scheme = "calver-by-date"
+# SemVer branch versioning
+#version_scheme = "release-branch-semver"
+
 
 # Set option pytest settings. Commented out for now.
 # [tool.pytest.ini_options]
@@ -43,3 +93,22 @@ exclude = '''
                      # the root of the project
 )
 '''
+
+# TODO - check issues below
+#####################################################################
+# Architecture / design / code review notes (training use)
+#####################################################################
+# This includes data files WITHIN the src package
+# PyPA recommends that any data files you wish to be accessible
+# at run time be included inside the package.
+# Check and review use of other methods if files from repo root
+# are also needed
+# Note - there are other methods to specify data files from version
+# control and using package_data option.
+# For now use of MANIFEST.in is acceptable.
+# Review in Q1 2024. See #35
+# Refs
+# https://packaging.python.org/en/latest/guides/distributing-packages-using-setuptools/
+# https://setuptools.pypa.io/en/latest/userguide/datafiles.html#subdirectory-for-data-files
+# https://packaging.python.org/en/latest/guides/using-manifest-in/
+# https://docs.python.org/3/library/importlib.resources.html#module-importlib.resources

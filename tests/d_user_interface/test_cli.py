@@ -25,7 +25,7 @@ TOOL = "cli-simple"
 """str: Script command name."""
 
 # Testing note
-# CLI tool is registered via entry points in setup.py
+# CLI tool is registered via project.scripts in pyproject.toml
 # Can't be called and run via filepath (does not use main)
 # Can't be called and run via module name (does not use main)
 
@@ -33,9 +33,9 @@ TOOL = "cli-simple"
 def test_cli_help_version():
     """Test the command can be called via help and version.
 
-    Allows verification that CLI tool is correctly installed (via setup.py)
+    Allows verification that CLI tool is correctly installed.
     """
-    # Note - the script tool name is set in the entry_points section of setup.py
+    # Note - the script name is set via project.scripts in pyproject.toml
     # TODO add a documentation cross ref here
     # Confirm success when run with help option
     out = subprocess.run([TOOL, "--help"], check=True)  # nosec
@@ -48,7 +48,7 @@ def test_cli_help_version():
 def test_cli_with_user_args():
     """Test the command can be called with user args.
 
-    Allows verification that CLI tool is correctly installed (via setup.py)
+    Allows verification that CLI tool is correctly installed.
     """
     out = subprocess.run(  # nosec  # bandit ignore
         [
@@ -83,7 +83,7 @@ def test_cli_with_user_args():
 def test_cli_with_user_args_various(x, y, expected):
     """Test the command can be called with user args.
 
-    Allows verification that CLI tool is correctly installed (via setup.py)
+    Allows verification that CLI tool is correctly installed.
     """
     out = subprocess.run(  # nosec  # bandit ignore
         [
