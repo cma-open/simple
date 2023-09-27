@@ -8,7 +8,7 @@ import logging
 import logging.config
 from pathlib import Path
 
-from simple.definitions import DEMO_DIR
+from simple.definitions import DEMO_TEMP_DIR
 
 logging.config.dictConfig(
     {
@@ -104,9 +104,9 @@ def demo_config_file_log(log_path):
     """Demo of log file write and content."""
     logger = create_config_logger(log_path=log_path)
     # Log message to write to the config log file
-    logger.debug("Config demo started")
-    logger.info("Config demo")
-    logger.debug("Config demo finished")
+    logger.debug("Config demo_temp started")
+    logger.info("Config demo_temp")
+    logger.debug("Config demo_temp finished")
 
 
 # TODO KISS - just chose debug levels and stick to them .....
@@ -117,18 +117,18 @@ def demo_system_console_log(log_path):
     logger = create_system_logger(log_path=log_path)
     # All log messages go to log file
     # Info level and above go to console
-    logger.debug("System demo started")  # File only
-    logger.info("System demo")  # File and console
+    logger.debug("System demo_temp started")  # File only
+    logger.info("System demo_temp")  # File and console
     logger.warning("System warning")  # File only
-    logger.debug("System demo finished")  # File only
+    logger.debug("System demo_temp finished")  # File only
 
 
 if __name__ == "__main__":
     # Create DEMO_DIR if not yet existing
-    DEMO_DIR.mkdir(exist_ok=True)
-    # Set within package location for demo log file
+    DEMO_TEMP_DIR.mkdir(exist_ok=True)
+    # Set within package location for demo_temp log file
     # Note - all log files are to be ignored via vcs
-    demo_system_log = DEMO_DIR / "demo_system.log"
+    demo_system_log = DEMO_TEMP_DIR / "demo_system.log"
     demo_system_console_log(log_path=demo_system_log)
-    demo_config_log = DEMO_DIR / "demo_config.log"
+    demo_config_log = DEMO_TEMP_DIR / "demo_config.log"
     demo_config_file_log(log_path=demo_config_log)
