@@ -1,26 +1,45 @@
 """Common code constants.
 
 .. module: definitions
-Currently used to generate main package name and directory
-for use by other modules.
+Generates main package name and directory for use by other modules.
 
 """
 
-import os
+from importlib.resources import files
+from pathlib import Path
 
-# Set the directory paths relative to this file
-# Note - only parent dir is reliable for use in user vs dev installs
-# repo/src/package (dev) or site-packages/package (user)
-PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Do not use refs to SRC_DIR or REPO_DIR
 # Set the package name
-# TODO check r.e. take name from setup.py to minimise duplication
+# TODO check r.e. take name from setup.py to minimise duplication - check after toml
+# TODO take name from package
 PACKAGE = "simple"
+# TODO refactor to give full path or as new RESORCES_DIR
 # Set namespace subpackage holding resource files
 RESOURCES = f"{PACKAGE}.resources"
 
-if __name__ == "__main__":
-    # Execute when the module is not initialized from an import statement.
-    print(f"definitions file: {os.path.abspath(__file__)}")
-    print(f"package dir: {PACKAGE_DIR}")
-    print(f"resources namespace subpackage: {RESOURCES}")
+# Set the directory paths relative to this file
+# Note - only parent package dir is reliable for use in both user and dev installs
+# repo/src/package (dev, editable) and site-packages/package (full install)
+PACKAGE_DIR = files(PACKAGE)
+# Root dir gives src (dev, editable) and site-packages (full install)
+ROOT_DIR = Path(files(PACKAGE)).parent
+
+RESOURCES_DIR = ROOT_DIR / PACKAGE / "resources"
+DEMOS_DIR = ROOT_DIR / PACKAGE / "demos"
+DEMO_TEMP_DIR = ROOT_DIR / PACKAGE / "demo_temp"
+
+# ===================================================================
+# Test type and location (training use)
+# ===================================================================
+# a_unit            test_definitions.py
+# b_integration     n/a
+# c_end_to_end      n/a
+# d_user_interface  n/a
+# ===================================================================
+
+
+#####################################################################
+# Architecture / design / code review notes (training use)
+# -------------------------------------------------------------------
+# Code is designed as modular to allow adaptation and reuse
+# e.g. PACKAGE variable use
+#####################################################################

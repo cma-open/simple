@@ -6,7 +6,7 @@
 
 repos: # List of repository mappings
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.4.0
     hooks:
     -   id: check-ast  # Confirm valid Python code
     -   id: check-executables-have-shebangs
@@ -24,20 +24,28 @@ repos: # List of repository mappings
 
 # Reformat code with black
 -   repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 23.9.1
     hooks:
     -   id: black
 
 # Sort imports alphabetically, and automatically separated into sections and by type.
 -   repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
     -   id: isort
         name: isort (python)
 
 # Run flake8 code linter for syntax errors, possible bugs, stylistic errors
 -   repo: https://github.com/PyCQA/flake8
-    rev: 5.0.4
+    rev: 6.1.0
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-docstrings]
+
+-   repo: https://github.com/aio-libs/sort-all
+    rev: v1.2.0
+    hooks:
+    -   id: sort-all
+        types: [file, python]
+
+# TODO add pycln hook to removed unused imports

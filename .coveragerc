@@ -4,7 +4,10 @@
 omit =
     *__init__.py
     */tests/*
+    *_version.py
 
 [report]
 skip_covered = True
 show_missing = True
+
+# note skip_covered can help if focussing on improving coverage in large codebase

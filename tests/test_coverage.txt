@@ -1,0 +1,23 @@
+Progress on test coverage
+
+Dev file to track work towards higher test coverage
+
+Package / subpackages
+
+- scripts
+    - shell scripts not currently tested
+- src/package/
+    - analysis = done
+    - common = done
+    - crutem
+    - data
+    - io
+    - netcdf
+    - prepare
+    - resources
+    - workflow
+- repo root
+    - config files typically tested by their readers
+    -
+
+TODO - check and clearly list how and where package constants and test resources are tested

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #######################################################################################
-# Script to install the system - see also wiki install notes
+# Script to install the system
 #######################################################################################
 
 # Set python package code dir as script constant (relative to this script)
@@ -21,7 +21,7 @@ echo
 echo "Install the system: via developer or user option"
 echo "Select Y only for one of the two following options"
 echo
-echo "Consider if you developing the system or are you an end user"
+echo "Consider: are you developing the system, or are you an end user?"
 echo
 sleep 2
 
@@ -74,6 +74,4 @@ echo
 # python3 -m pip install -e <path>
 # normal install from within a src
 # python3 -m install <path>
-
-
 #######################################################################################

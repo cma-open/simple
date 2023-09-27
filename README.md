@@ -13,18 +13,28 @@ Repo content
     - Illustrates
         - Good test coverage (pytest)
         - Good code quality (Codacy)
+        - Code standards and style
+            - black
+            - PEP8
         - Automated testing (GitHub workflow actions)
         - Use of conda environment
-        - Simple config file use
-        - Basic log files
+        - Simple config file use (WIP)
+        - Basic log files (WIP)
 
 User instructions
+
+    - Prerequisites
+        - conda must be installed and available to the system
 
     - Checkout
         - Checkout the code locally from the GitHub repo
 
     - Config
-        - Open src/simple/config.ini and set datadir and scratchdir or retain defaults
+        - Open src/simple/config.ini and set datadir (or retain defaults)
+        - Note if default config is used then data will write to home (~)
+        - Note if an editable install is selected (see installation)
+             - config setting are ignored
+             - data is written within the repo directory structure
         - If any config is changed later, then re-install and run through the workflow again
 
     - Installation
@@ -32,11 +42,16 @@ User instructions
         - scripts/install/install.sh
 
     - Usage
-        - workflow
-            - confirm_config: print and log config settings
-            - create-data:
-            - create-data-options:
-            - clean: remove data files
+        - workflow: run these from the command line, within the activated conda environment
+            - confirm-config
+                - prints and logs the chosen config settings
+            - create-data
+                - creates a test.nc netcdf file in outputs dir
+            - create-data-options
+                - creates a test.nc netcdf file in ouputs dir
+                - has user options e.g. --verbose
+            - clean
+                - removes the set of data files that were created within outputs
 
 Todo
 
@@ -44,4 +59,11 @@ Todo
 
 Fix next steps
 
-    - note about pip show nd pip uninstall errors
+    - note about pip show and pip uninstall errors
+
+Code review and system architecture
+
+    - docstrings are added to tests, against convention, to aid display via sphinx
+    - tests are not always realistic, the system is over-tested as a training example
+
+Logging strategy

@@ -11,7 +11,8 @@ def test_data_resources():
     """Test that package resources can be accessed via namespace."""
     package_resources = files(RESOURCES)
     assert package_resources.is_dir()
-    expected_filenames = ["data1.txt", "data2.csv"]
+    # List files expected to be within the resources directory
+    expected_filenames = ["data1.txt", "data2.csv", "test_config.ini"]
     for file in package_resources.iterdir():
         if DEBUG:
             print(file)
@@ -26,3 +27,7 @@ def test_data_resources_file_content():
     if DEBUG:
         print(data_text)
     assert data_text == "hello world"
+
+
+# TODO these seem duplicates of the b_integration/test_resources.py
+# TODO check and delete

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #######################################################################################
-# Script to run all system tests
+# Script to run all system tests - show only failed tests - for dev use
 # Invoking tests via pytest
 # Called imported code will differ if local editable vs user install
 #######################################################################################
@@ -16,7 +16,7 @@ echo "Current working directory: ${PWD}"
 # --tb traceback print mode (auto/long/short/line/native/no)., e.g. --tb=long
 echo "Move to test dir and run pytest: ${TESTS_DIR}"
 cd "${TESTS_DIR}"
-pytest --tb=long -vrA
+pytest --tb=long -vvvrf
 
 #######################################################################################
 # Code review and system context notes
