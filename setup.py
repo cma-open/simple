@@ -40,8 +40,8 @@ setuptools.setup(
             "create-data-options=" "simple.cli:cli_data",
             # Name clean command
             "clean=" "simple.io.io:main",
-            # Name demo command
-            "demo=" "simple.logging.log",
+            # Name demo_temp command
+            "demo=" "simple.demos.demos:demo_logs",
         ]
     },
     # TODO note deprecated - monitor, review, move later to use pyproject.toml
