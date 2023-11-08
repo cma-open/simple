@@ -2,6 +2,7 @@
 
 #######################################################################################
 # Script to hold common code used by the test scripts
+# Library script, not executable
 #######################################################################################
 
 # ensure conda commands are accessible

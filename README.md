@@ -39,9 +39,9 @@ User instructions
 
     - Installation
         - cd scripts/conda
-        - ./create-env.sh
+        - ./create-env
         - cd scripts/install
-        - ./install.sh
+        - ./install
 
     - Usage
         - make sure the environment has been activated
@@ -61,6 +61,17 @@ User instructions
             - demo
                 - prints a demo of system logs to terminal
 
+Development and testing
+
+    - Develope instal via the instal scriot and following prompts
+        - cd scripts/install
+        - ./install
+    - Tests run via
+        - cd scripts/tests
+        - ./test
+    - Test coverage checked via
+        - cd scripts/tests
+        - ./coverage
 
 Code review and system architecture
 

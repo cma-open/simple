@@ -2,6 +2,7 @@
 
 #######################################################################################
 # Script to hold common code used by scripts
+# Library script, not executable
 #######################################################################################
 
 # Assume CODE_DIR is always set by the calling script
