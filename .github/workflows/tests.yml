@@ -54,8 +54,8 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
         cd scripts/tests
-        chmod +x test.sh
-        ./test.sh
+        chmod +x test
+        ./test
     - name: Test with coverage
       # Re-run the tests and report test coverage
       # Does not fail with error code if any tests fail, output is for info only
@@ -101,7 +101,7 @@ jobs:
         conda activate $CONDA_ENV
         # run pytest against installed package
                 cd scripts/tests
-        chmod +x test.sh
-        ./test.sh
+        chmod +x test
+        ./test
         # Step used as an example to show testing of installed package
         # vs local editable code
