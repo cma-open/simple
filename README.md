@@ -38,11 +38,17 @@ User instructions
         - If any config is changed later, then re-install and run through the workflow again
 
     - Installation
-        - scripts/conda/create-env.sh
-        - scripts/install/install.sh
+        - cd scripts/conda
+        - ./create-env.sh
+        - cd scripts/install
+        - ./install.sh
 
     - Usage
-        - workflow: run these from the command line, within the activated conda environment
+        - make sure the environment has been activated
+            - conda activate simple-env
+        - system workflow: run these from the command line
+            - cli-simple
+                - Custom analysis calculation on two supplied integers
             - confirm-config
                 - prints and logs the chosen config settings
             - create-data
@@ -52,18 +58,31 @@ User instructions
                 - has user options e.g. --verbose
             - clean
                 - removes the set of data files that were created within outputs
+            - demo
+                - prints a demo of system logs to terminal
 
-Todo
-
-    - check google shell script standard - lib vs executable
-
-Fix next steps
-
-    - note about pip show and pip uninstall errors
 
 Code review and system architecture
 
     - docstrings are added to tests, against convention, to aid display via sphinx
     - tests are not always realistic, the system is over-tested as a training example
 
+Codestyle
+
+    - PEP8, black
+    - Google shell script standard
+        - (lib vs executable)
+
+Branches and releases
+
+    - Manual releases via the CalVer system
+    - Dev branches named by feature number
+    - Dev system version will be named automatically via setuptools scm
+
 Logging strategy
+
+    - WIP
+
+Wiki
+
+    - Not used in this repo
