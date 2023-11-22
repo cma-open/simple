@@ -1,0 +1,29 @@
+name: "conda-env-cache"
+description: "create and cache the conda environment"
+
+inputs:
+  cache_build:
+    description: "conda environment cache build number"
+    required: false
+    default: "0"
+  cache_period:
+    description: "conda environment cache timestamp"
+    required: true
+  cache_env:
+    description: "conda environment name to be cached"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/cache@v3
+      id: conda-env-cache
+      with:
+        path: /usr/share/miniconda/envs/${{ inputs.cache_env }}
+        key: conda-cache-${{ hashFiles('environment.yml') }}--p${{ inputs.cache_period }}-b${{ inputs.cache_build }}
+        restore-keys: |
+          conda-cache-p${{ inputs.cache_period }}-b${{ inputs.cache_build }}
+    - if: steps.conda-env-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        conda env create -f $ENV_FILE
