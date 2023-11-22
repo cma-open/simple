@@ -22,26 +22,33 @@ env:
   PACKAGE: simple # Name of package directory within repo
   CONDA_ENV: simple-env # Name is set in the $ENV_FILE
   ENV_FILE: environment.yml
+  CACHE_WEEKS: 2
   REMOTE_TESTS: True # To configure test behaviour
 
 jobs:
   run-tests:
     timeout-minutes: 20 # Limit total time use of the workflow action
     runs-on: ubuntu-latest
-    env:
-      REMOTE_TESTS: True
     steps:
     - uses: actions/checkout@v3 # checkout code to the runner workspace root
-    - name: Install dependencies
+    - name: "environment configure"
       run: |
-        conda env create -f $ENV_FILE
+        echo "CACHE_PERIOD=$(date +%Y).$(expr $(date +%U) / ${CACHE_WEEKS})" >> ${GITHUB_ENV}
+    - name: "conda environment cache"
+      uses: ./.github/workflows/composite/conda-env-cache
+      with:
+        cache_build: 0
+        cache_period: ${{ env.CACHE_PERIOD }}
+        cache_env: ${{ env.CONDA_ENV }}
     - name: conda check
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate $CONDA_ENV
+        echo
         which python
         python --version
         conda info --envs
+        echo
     - name: Install
       run: |
         source /usr/share/miniconda/etc/profile.d/conda.sh
