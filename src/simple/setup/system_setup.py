@@ -3,7 +3,7 @@
 import logging
 from pathlib import Path
 
-from simple.common.common import check_install_status, debug_loggers
+from simple.common.common import check_install_status
 from simple.config.reader import (
     ConfigException,
     return_datadir,
@@ -152,5 +152,5 @@ def system_setup() -> None:
     logger_name.info("System setup has run")
 
     # Print out current loggers - only for editable installs
-    if check_install_status() == "Editable":
-        debug_loggers()
+    # if check_install_status() == "Editable":
+    #    debug_loggers()

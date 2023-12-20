@@ -10,7 +10,12 @@ def test_resources_files():
     package_resources = files(RESOURCES)
     assert package_resources.is_dir()
     # List files expected to be within the resources directory
-    expected_filenames = ["data1.txt", "data2.csv", "test_config.ini"]
+    expected_filenames = [
+        "data1.txt",
+        "data2.csv",
+        "test_config.ini",
+        "github_config.ini",
+    ]
     for file in package_resources.iterdir():
         assert file.name in expected_filenames
         assert file.is_file()

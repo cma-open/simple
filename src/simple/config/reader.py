@@ -2,10 +2,11 @@
 
 import configparser
 import logging
+import os
 from pathlib import Path
 
 from simple.common.common import check_install_status
-from simple.definitions import PACKAGE_DIR, ROOT_DIR
+from simple.definitions import PACKAGE_DIR, RESOURCES_DIR, ROOT_DIR
 from simple.logger.log import CONFIG_LOG_FILE, SYSTEM_LOG_FILE, create_config_logger
 
 # Set module level logger
@@ -13,8 +14,13 @@ logger = logging.getLogger(__name__)
 
 # Create configparser object
 config = configparser.ConfigParser()
-# Set path to user edited config file
-configfile = f"{PACKAGE_DIR}/config.ini"
+# Allow for testing system use via GitHub action  with test config
+# Otherwise use set path to user edited config file
+IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
+if IN_GITHUB_ACTIONS:
+    configfile = RESOURCES_DIR / "test_config.ini"
+else:
+    configfile = f"{PACKAGE_DIR}/config.ini"
 # Not supplied with docstring so filepath is not visible in sphinx docs
 
 # Add note here and link to the package system strategy for logging
