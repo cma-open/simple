@@ -23,7 +23,7 @@ env:
   PACKAGE: simple # Name of package directory within repo
   CONDA_ENV: simple-env # Name is set in the $ENV_FILE
   ENV_FILE: environment.yml
-  CACHE_WEEKS: 2
+  CACHE_WEEKS: 4
   REMOTE_TESTS: True # To configure test behaviour
 
 jobs:

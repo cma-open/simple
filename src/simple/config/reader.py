@@ -18,7 +18,7 @@ config = configparser.ConfigParser()
 # Otherwise use set path to user edited config file
 IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
 if IN_GITHUB_ACTIONS:
-    configfile = RESOURCES_DIR / "test_config.ini"
+    configfile = RESOURCES_DIR / "github_config.ini"
 else:
     configfile = f"{PACKAGE_DIR}/config.ini"
 # Not supplied with docstring so filepath is not visible in sphinx docs
