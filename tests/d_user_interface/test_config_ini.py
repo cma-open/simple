@@ -41,10 +41,12 @@ def test_config_ini_file_values():
     inputs = config.get("DATADIR", "INPUTS")
     outputs = config.get("DATADIR", "OUTPUTS")
     scratch = config.get("DATADIR", "SCRATCH")
-    system_logs = config.get("DATADIR", "INPUTS")
-    config_logs = config.get("DATADIR", "OUTPUTS")
-    log_level = config.get("DATADIR", "SCRATCH")
+    logs = config.get("LOGS", "PACKAGE_LOGS")
+    verbose = config.get("LOGS", "VERBOSE")
+    log_level = config.get("LOGS", "LOG_LEVEL")
     # Test section values are non-empty strings
-    values_list = [inputs, outputs, scratch, system_logs, config_logs, log_level]
+    values_list = [inputs, outputs, scratch, logs, verbose, log_level]
     for value in values_list:
         assert isinstance(value, str) and len(value) > 0
+    # Potential for further detailed tests here but better handled
+    # via the config reader validation.

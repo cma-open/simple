@@ -4,4 +4,4 @@
 def data_example():
     """Create data example."""
 
-    # logging note
+    # logger note

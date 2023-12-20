@@ -11,17 +11,22 @@ literal blocks::
 # TODO replace above example
 
 import argparse
+import logging
 from importlib.metadata import version
 
 from simple.analysis.analysis import calculate
 from simple.definitions import PACKAGE
 from simple.netcdf.data import main
 
-DEBUG = True
-"""bool: Debugging level, module level constant (Default: True)."""
-
 # Take the version number from the package version
 pkg_version = version(PACKAGE)
+
+# Note - reminder (keep) no need to setup logging as access to any of the system
+# subpackages will use an instantiated logger
+# do not call setup_system_log()
+
+# Set module logger
+logger = logging.getLogger(__name__)
 
 
 def cli_entry_point(argv: list[str] | None = None) -> None:
@@ -61,8 +66,13 @@ def cli_entry_point(argv: list[str] | None = None) -> None:
 
     # Run analysis calculation using the user provided input args
     result = calculate(parsed_args.x, parsed_args.y)
-
+    # Log that the cli tool is running, with inputs
+    logger.debug(
+        f"Running cli-simple tool with - x: {parsed_args.x}, " f"y: {parsed_args.y}, "
+    )
     print(result)  # print to stdout, don't return a value
+    logger.debug(f"cli-simple tool result: {result}")
+    logger.info("cli-simple tool has run.")
 
     # Note cli tools may be expected to return none or 0 for testing
     # Note when developing cli tools, check for returncode if used and
@@ -118,8 +128,13 @@ def cli_data(argv: list[str] | None = None) -> None:
     # parse to namespace object
     parsed_args = parser.parse_args(argv)
     # TODO add use of value
+    logger.debug(f"Running: {parser.prog}")
+    logger.debug(f"Value(s): {parsed_args.value}")
+    logger.debug(f"Verbose: {parsed_args.verbose}")
     # Run using the user provided input args
     main(debug=parsed_args.verbose)
+    logger.info("Tool has run.")
+    logger.info(f"Tool {parser.prog} has run.")
     # Note cli tools may be expected to return none or 0 for testing
     # When developing tests for cli tools, check the use of returncode
 

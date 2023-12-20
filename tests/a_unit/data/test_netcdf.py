@@ -1,10 +1,10 @@
 """Tests for the netcdf module."""
 
 from datetime import datetime
+from importlib.metadata import version
 
 import netCDF4 as nc
 import numpy as np
-import pkg_resources
 import pytest
 
 from simple.definitions import PACKAGE
@@ -16,7 +16,7 @@ from simple.netcdf.tools import (
 )
 
 # Take the version number from the package version in setup
-PKG_VERSION = pkg_resources.get_distribution(PACKAGE).version
+PKG_VERSION = version(PACKAGE)
 
 
 # Create pytest fixtures for use in testing

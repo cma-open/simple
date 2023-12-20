@@ -11,7 +11,7 @@
 
 import subprocess  # nosec  # bandit ignore
 
-DEBUG = False
+from simple.config.reader import return_verbosity
 
 TOOL = "cli-simple"
 """str: Script command name."""
@@ -23,8 +23,8 @@ def test_cli_run_as_user():
     uargs = "5", "5"
     # Use subprocess to run the tool with user inputs
     output = subprocess.run([TOOL, *uargs], capture_output=True, text=True)  # nosec
-    # Print full output, for debug / example use
-    if DEBUG:
+    # Print full output, for debug / example use if verbose editable install
+    if return_verbosity():
         print("--")
         print(output)
         print("---")

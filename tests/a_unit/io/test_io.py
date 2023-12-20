@@ -2,19 +2,26 @@
 
 from unittest.mock import patch
 
-from simple.io.io import DEBUG, main
+from simple.config.reader import return_verbosity
+from simple.io.io import main
 
 
 @patch("simple.io.io.clean_directory")  # Note the source!
-def test_main(mock_clean_directory, capsys):
+def test_main(mock_clean_directory, capsys, caplog):
     """Test main function from io module."""
-    # main function remove files from DATADIR
+    # Main function remove files from DATADIR
     # TODO review coverage and test type
     main()
-    # check that the mocked function was called
+    # Check that the mocked function was called
     mock_clean_directory.assert_called_once()
-    if DEBUG:
-        # check output to stdout is as expected
+
+    # Some log or console stdout or stderr depends on system status settings
+    # Example
+    if return_verbosity():
+        # Check output to stdout is as expected
         captured = capsys.readouterr()
-        expected = "Removing any existing data files from:"
-        assert expected in captured.out
+        print(f"Stdout: {captured.out}")
+        print(f"Stderr: {captured.err}")
+        # Check log outputs
+        expected = "Removing any existing data files "
+        assert expected in caplog.text

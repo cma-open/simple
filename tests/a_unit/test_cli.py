@@ -8,8 +8,7 @@ import numpy as np
 import pytest
 
 from simple.cli import cli_data, cli_entry_point
-
-DEBUG = True
+from simple.config.reader import return_verbosity
 
 
 # Patch out functions at the location used, not where defined
@@ -139,7 +138,8 @@ def test_cli_data(mock_outfile, mock_outputs, tmp_path):
             "simple.netcdf.data.set_cf_convention_level", mock_set_cf_convention_level
         ):
             cli_data(argv=["4"])
-            if DEBUG:
+            # Further print to stdout for verbose set editable installs
+            if return_verbosity():
                 print(f"Temp path: {tmp_path}")
                 for item in tmp_path.iterdir():
                     print(item)

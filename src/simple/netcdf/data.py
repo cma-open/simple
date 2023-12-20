@@ -1,13 +1,10 @@
 """Netcdf data creation."""
-
-# Some examples from https://pyhogs.github.io/intro_netcdf4.html
-# Some examples from https://opensourceoptions.com/blog/create-netcdf-files-with-python/
-
+import logging
 from datetime import datetime
+from importlib.metadata import version
 
 import netCDF4 as nc
 import numpy as np
-import pkg_resources
 
 from simple.config.reader import return_outputs
 from simple.definitions import PACKAGE
@@ -17,11 +14,17 @@ from simple.netcdf.tools import (
     print_netcdf_variables,
 )
 
+# Some examples from https://pyhogs.github.io/intro_netcdf4.html
+# Some examples from https://opensourceoptions.com/blog/create-netcdf-files-with-python/
+
+
+logger = logging.getLogger(__name__)
+
 # Set output data filename
 DATAFILE = "data.nc"
 
 # Take the version number from the package version in setup
-PKG_VERSION = pkg_resources.get_distribution(PACKAGE).version
+PKG_VERSION = version(PACKAGE)
 
 
 def return_outfile(path, filename):
@@ -89,6 +92,7 @@ def set_cf_convention_level(netcdf, cf=None):
 
 def main(debug=None):
     """Process main netcdf file creation workflow."""
+    logger.debug("Creating netcdf data")
     output_file = return_outfile(return_outputs(), DATAFILE)
     if debug:
         print("Creating data - netcdf ")
@@ -100,6 +104,7 @@ def main(debug=None):
         print_netcdf_content(output_file)
         print_netcdf_dimensions(output_file)
         print_netcdf_variables(output_file)
+    logger.info(f"Netcdf data created at {output_file}")
 
 
 # lat, lon = f.variables['Latitude'], f.variables['Longitude']

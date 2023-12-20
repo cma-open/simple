@@ -49,8 +49,14 @@ User instructions
         - system workflow: run these from the command line
             - cli-simple
                 - Custom analysis calculation on two supplied integers
+                - A simple example of an argparse command line tool
             - confirm-config
-                - prints and logs the chosen config settings
+                - prints the chosen config  to terminal
+                - this command does not use the log files
+            - system-setup
+                - Sets up the system ready for use
+                - Logs the config to file, begins detailed system use logging
+                - Creates the required system directories (as set in the config)
             - create-data
                 - creates a test.nc netcdf file in outputs dir
             - create-data-options
@@ -58,31 +64,37 @@ User instructions
                 - has user options e.g. --verbose
             - clean
                 - removes the set of data files that were created within outputs
-            - demo
-                - prints a demo of system logs to terminal
+            - demo_logs
+                - Creates both config and system demo logs in a temp directory
+
 
 Development and testing
 
-    - Develope instal via the instal scriot and following prompts
+    - Install via the script and follow the prompts
         - cd scripts/install
         - ./install
     - Tests run via
         - cd scripts/tests
         - ./test
+        - ./dev-test (runs tests with report of currently failing tests)
     - Test coverage checked via
         - cd scripts/tests
         - ./coverage
 
-Code review and system architecture
+System design, content, and architecture
 
     - docstrings are added to tests, against convention, to aid display via sphinx
     - tests are not always realistic, the system is over-tested as a training example
+    - system features are chosne to illustrate training examples, so not always realistic
+    - features may be duplicated to allow different solutions to be compared
 
-Codestyle
+Codestyle code quality and code review
 
     - PEP8, black
     - Google shell script standard
         - (lib vs executable)
+    - automated tests run via GitHub actions
+    - branch based development with code review per pull request
 
 Branches and releases
 
@@ -92,7 +104,29 @@ Branches and releases
 
 Logging strategy
 
-    - WIP
+    - System contains a logger subpackage and a log module
+    - Two log files are created
+      - config.log
+      - system.log
+
+    - The Config log is specialised and has limited use.
+    - This log is referenced directly by name: ConfigLog
+    - ConfigLog (config.log) holds a record of current system configuration
+       and installation settings. This logger only holds a file handler
+      therefore all calls are output to file not to the terminal.
+      The file is set to overwrite each time it is run.
+
+    - The main system Log (system.log) uses both a console logger and file handler.
+      Information is output to both terminal console and to file.
+      INFO level and above go to the console.
+      DEBUG and above go to file.
+      Therefore more detailed logging is available by checking the system.log file.
+
+      A verbose setting is used to deselect some log output if set to False. This can
+      make logs smaller and easier to read. If needed for additional debugging this can
+      be set to True and will cause further debug messages to be logged.
+      The verbose settign only applies to developer editable installs not full user use.
+      (Reminder DEBUG>INFO>WARNING>ERROR>CRITICAL)
 
 Wiki
 

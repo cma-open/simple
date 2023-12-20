@@ -36,19 +36,19 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 # Set all command line scripts
 # These are added as command line options once the system is installed
 [project.scripts]
-my-script = "my_package.module:function"
-# Name cli-simple command (uses argparse)
-cli-simple  = "simple.cli:cli_entry_point"
-# Name confirm-config command
-confirm-config = "simple.config.reader:main"
-# Name create-data command (cf with options)
-create-data = "simple.netcdf.data:main"
-# Name create-data-options command (uses argparse)
-create-data-options = "simple.cli:cli_data"
-# Name clean command
-clean = "simple.io.io:main"
-# Name demo_temp command
-demo = "simple.demos.demos:demo_logs"
+# format is: my-script = "my_package.module:function"
+
+# Tested + working - does not use additional setup_system_log()
+system-setup = "simple.setup.system_setup:system_setup"  # no argparse
+cli-simple  = "simple.cli:cli_entry_point"  # uses argparse
+create-data-options = "simple.cli:cli_data"  # uses argparse
+
+# Tested + working - has setup_system_log() in subpackage init
+confirm-config = "simple.status.checks:confirm_config"  # no argparse
+create-data = "simple.netcdf.data:main"  # no argparse
+clean = "simple.io.io:main"  # no argparse
+demo-logs = "simple.demos.demos:demo_logs"  # no argparse
+system-version = "simple.status.checks:show_version"  # no argparse
 
 
 [tool.setuptools_scm]

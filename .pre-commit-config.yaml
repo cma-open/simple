@@ -48,4 +48,7 @@ repos: # List of repository mappings
     -   id: sort-all
         types: [file, python]
 
-# TODO add pycln hook to removed unused imports
+-   repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.1
+    hooks:
+    -   id: autoflake

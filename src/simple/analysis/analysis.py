@@ -1,10 +1,14 @@
 """Analysis module to provide command line interface calculations."""
 
+import logging
+
 from simple.prepare.prepare import add_small_constant, convert_to_string
 
 # Note / Reminder
 # These are just example functions to illustrate testing, as either single functions
 # or functions that also contain other functions.
+
+logger = logging.getLogger(__name__)
 
 
 def duplicate(input_value: str) -> list:
@@ -21,6 +25,7 @@ def duplicate(input_value: str) -> list:
         A 2 item list with the input str value duplicated
     """
     input_list = [input_value, input_value]
+    logger.debug(f"Duplicating {input_value} to give: {input_list}")
     return input_list
 
     # ===================================================================
@@ -57,6 +62,10 @@ def calculate(x: int, y: int) -> list:
     result_string = convert_to_string(result_modified)
     # Duplicate the strings into a list
     result_list = duplicate(result_string)
+    logger.debug(
+        f"Summing {x} and {y}, adding constant, modifying, duplicating"
+        f" to give: {result_list}"
+    )
     return result_list
 
     # ===================================================================

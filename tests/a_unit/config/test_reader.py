@@ -15,13 +15,11 @@ from simple.config.reader import (
     return_logs_dir,
     return_outputs,
     return_scratch,
-    setup_directories,
 )
 from simple.definitions import RESOURCES
+from simple.setup.system_setup import setup_directories
 
 TEST_CONFIGFILE = files(RESOURCES) / "test_config.ini"
-
-DEBUG = True
 
 
 # Patch out functions at the location used, not where defined

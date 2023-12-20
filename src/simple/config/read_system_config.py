@@ -2,12 +2,11 @@
 Module to read in settings from config file.
 
 TODO raise issue
-leaving in repo for now - convert ot an alternative example reader
+leaving in repo for now - convert to an alternative example reader
 """
 
 import datetime
 import os
-from pathlib import Path
 
 import yaml
 from jinja2 import DebugUndefined, Environment, FileSystemLoader
@@ -43,8 +42,8 @@ class SystemConfig:
 
     def read_config(self):
         """Load configuration containing values to be inserted into the template."""
-        fullpath = Path(PACKAGE_DIR) / CONFIG
-        print(fullpath)
+        # fullpath = Path(PACKAGE_DIR) / CONFIG
+        # print(fullpath)
         # with open(fullpath) as config_content:
         # Load the global configuration
         # config_content = yaml.safe_load(fullpath)
