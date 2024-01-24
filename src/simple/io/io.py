@@ -11,7 +11,7 @@ DATADIR = return_datadir()
 OUTPUTS = Path(DATADIR) / return_outputs()
 
 # List of data files generated and used within the system.
-FILES = ["test.nc", "other.nc", "more.txt"]
+FILES = ["test.nc", "other.nc", "data.nc", "more.txt"]
 
 logger = logging.getLogger(__name__)
 

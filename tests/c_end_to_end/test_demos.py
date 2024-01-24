@@ -4,8 +4,11 @@
 # Aim to test software from start to finish (as used by the user)
 # If testing API, then make calls as clients would.
 
-from simple.definitions import DEMO_TEMP_DIR
+
+from simple.config.reader import return_demo_temp
 from simple.demos.demos import demo_logs
+
+DEMO_TEMP_DIR = return_demo_temp()
 
 
 def test_demo_system_log():

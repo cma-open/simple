@@ -8,6 +8,7 @@ from simple.config.reader import (
     ConfigException,
     return_datadir,
     return_datadir_root,
+    return_demo_temp,
     return_inputs,
     return_logs_dir,
     return_outputs,
@@ -28,31 +29,73 @@ logger_name = logging.getLogger(__name__)
 system_logger = logging.getLogger(PACKAGE)
 
 
-def setup_directories(datadir_root_path: str | Path) -> None:
-    """Create system directory structure.
+def key_directories() -> list:
+    """Key system directories list.
 
-    Parameters
-    ----------
-    str : Path
-        Root of the datadir directory within which to create subdirectories
+    Returns
+    -------
+    list
+        List of the main system directories, full paths
     """
-    # Get current subdirectories to create
-    inputs_dir = return_inputs()
-    outputs_dir = return_outputs()
-    scratch_dir = return_scratch()
-    logs_dir = return_logs_dir()
-    # Ensure the datadir root is a path object
-    datadir_path_obj = Path(datadir_root_path)
+    key_directories = [
+        return_inputs(),
+        return_outputs(),
+        return_scratch(),
+        return_demo_temp(),
+        return_logs_dir(),
+    ]
+    return key_directories
+
+
+# ToDo move to common or status if it is needed elsewhere in system
+def verify_directories() -> bool:
+    """Verify required directories exist.
+
+    Returns
+    -------
+    bool
+        True if all required directories exist on disk.
+    """
     # List subdirectories to be created
-    subdirs_to_create = [inputs_dir, outputs_dir, scratch_dir, logs_dir]
-    # Create subdirectories and parent dirs if required
+    subdirs_to_create = key_directories()
+    # Set list to collect responses
+    dir_exists = []
+    # Check if subdirectories exist
     for subdir in subdirs_to_create:
-        (datadir_path_obj / subdir).mkdir(parents=True, exist_ok=True)
+        dir_exists.append(subdir.is_dir())
+    # Convert to single value (True if all dirs exist, otherwise False)
+    dirs_all_exist = all(dir_exists)
+    return dirs_all_exist
 
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
-    # a_unit            setup/test_system_setup.py
+    # a_unit            ?
+    # b_integration     ?
+    # c_end_to_end      ?
+    # d_user_interface  ?
+    # ===================================================================
+
+
+def setup_directories(key_directories: list) -> None:
+    """Create system directory structure.
+
+    Parameters
+    ----------
+    str : key_directories
+        List of main directories to be created for the system
+    """
+    # Create subdirectories and parent dirs if required
+    print(f"key directories: {key_directories}")
+    for subdir in key_directories:
+        print(subdir)
+        # (datadir_path_obj / subdir).mkdir(parents=True, exist_ok=True) TODO
+        subdir.mkdir(parents=True, exist_ok=True)
+
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            setup/test_system_setup.py TODO check and refactor
     # b_integration     N/A TODO >>>>>>>>
     # c_end_to_end      N/A
     # d_user_interface  N/A
@@ -134,23 +177,23 @@ def update_system_log(logger: str) -> None:
 
 def system_setup() -> None:
     """System setup of directories and loggers."""
-    # Create required system directory structure
-    logger_name.debug("Creating directories")
-    setup_directories(datadir_root_path=return_datadir())
+    # Initially only the package level system logger exists (system_logger)
+    # if not verify_directories(datadir_root_path=return_datadir()): TODO
+    if not verify_directories():
+        # Log to terminal and file as relatively infrequent occurrence
+        system_logger.info("Some required dirs don't exist on disk")
+        system_logger.info("Creating required directories")
+        system_logger.info("System setup running")
+        setup_directories(key_directories=key_directories())
 
     # Update system log with added log file handler
     # (Log already exists via init)
     update_system_log(logger=system_logger)
-    logger_name.debug("System directories created")
 
-    # Log the system configuration to file
     # Log system settings to config log file under logs dir as set in config.ini
     log_config(return_logs_dir())
-    logger_name.info(f"Config logged to file in {return_logs_dir()}")
-    logger_name.info(f"System log file created in {return_logs_dir()}")
+    # Log messages will be frequently called, therefore set to debug, for file
+    logger_name.debug(f"Config logged to file in {return_logs_dir()}")
+    logger_name.debug(f"System log file created or updated in {return_logs_dir()}")
     logger_name.debug(f"System log: {logger_name}")
-    logger_name.info("System setup has run")
-
-    # Print out current loggers - only for editable installs
-    # if check_install_status() == "Editable":
-    #    debug_loggers()
+    logger_name.debug("System setup has run")

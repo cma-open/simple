@@ -27,11 +27,12 @@ def test_return_datadir_full_install(mock_install_status):
     mock_install_status.return_value = "Install"
     # Runs tests using the test_config.ini file
     with patch("simple.config.reader.configfile", TEST_CONFIGFILE):
+        # Get datadir (will always be a Path object)
         datadir = return_datadir()
         # Print further info for verbose editable installs
         if return_verbosity():
             print(f"Datadir is: {datadir}")
-        expected = "/alt/home/user/temp"
+        expected = PosixPath("/alt/home/user/temp")
         assert datadir == expected
     # Editable and home ~ directory based confg options not tested here, see unit tests
 

@@ -2,8 +2,7 @@
 import logging
 
 from simple.common.common import debug_loggers
-from simple.config.reader import return_verbosity
-from simple.definitions import DEMO_TEMP_DIR
+from simple.config.reader import return_datadir, return_verbosity
 from simple.logger.log import (
     add_system_console_handler,
     create_config_logger,
@@ -11,6 +10,8 @@ from simple.logger.log import (
 )
 
 system_logger = logging.getLogger(__name__)
+
+DEMO_TEMP_DIR = return_datadir() / "demo_temp"
 
 # TODO KISS - just chose debug levels and stick to them .....
 
@@ -42,7 +43,9 @@ def demo_logs():
     # Dev Note - all log files should be ignored via vcs
     # Create DEMO_DIR if not yet existing
     DEMO_TEMP_DIR.mkdir(exist_ok=True)
-    # Set within package location for demo_temp log files x2
+    # Note - for dev install demo_temp will be within repo
+    # Note - for a full install demo_temp will be within datadir root
+    # Set full path location for demo_temp log files x2
     demo_system_log = DEMO_TEMP_DIR / "demo_system.log"
     demo_config_log = DEMO_TEMP_DIR / "demo_config.log"
     # Run the demo to create console logs

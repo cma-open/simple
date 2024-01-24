@@ -10,12 +10,10 @@ build-backend = "setuptools.build_meta"
 name = "simple"
 authors = [
     {name = "Jonathan Winn"},
-    #{name = "Jonathan Winn", email = "N/A"},
 ]
 description = "A simple python package with command line tools and test examples."
 readme = "README.md"
 requires-python = ">=3.10"
-#license = {text = "BSD-3-Clause"}
 license = {file = "LICENSE"}
 dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 
@@ -38,17 +36,20 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 [project.scripts]
 # format is: my-script = "my_package.module:function"
 
-# Tested + working - does not use additional setup_system_log()
-system-setup = "simple.setup.system_setup:system_setup"  # no argparse
+# Tested + working - tools using argparse
 cli-simple  = "simple.cli:cli_entry_point"  # uses argparse
 create-data-options = "simple.cli:cli_data"  # uses argparse
 
-# Tested + working - has setup_system_log() in subpackage init
+# Tested + working - no use of argparse
+system-version = "simple.status.checks:show_version"  # no argparse
+show-loggers = "simple.status.checks:show_loggers"  # no argparse
 confirm-config = "simple.status.checks:confirm_config"  # no argparse
+
+# Tested + working
+
 create-data = "simple.netcdf.data:main"  # no argparse
 clean = "simple.io.io:main"  # no argparse
 demo-logs = "simple.demos.demos:demo_logs"  # no argparse
-system-version = "simple.status.checks:show_version"  # no argparse
 
 
 [tool.setuptools_scm]

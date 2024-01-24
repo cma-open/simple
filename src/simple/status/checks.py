@@ -80,3 +80,13 @@ def confirm_config() -> None:
      """
     )
     logger.debug("Confirm-config ran.")
+
+
+def show_loggers():
+    """Show loggers available to the  system."""
+    # Get all logger objects
+    loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+    # Print full list of loggers for verbose editable installs
+    print("---")
+    print(*loggers, sep="\n")
+    print("---")

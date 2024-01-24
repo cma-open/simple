@@ -23,8 +23,6 @@ PACKAGE_DIR = files(PACKAGE)
 ROOT_DIR = Path(files(PACKAGE)).parent
 
 RESOURCES_DIR = ROOT_DIR / PACKAGE / "resources"
-DEMOS_DIR = ROOT_DIR / PACKAGE / "demos"
-DEMO_TEMP_DIR = ROOT_DIR / PACKAGE / "demo_temp"
 
 
 # ===================================================================

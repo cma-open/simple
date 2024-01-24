@@ -32,7 +32,7 @@ class ConfigException(Exception):
     """System config exception class."""
 
 
-def return_datadir() -> str | Path:
+def return_datadir() -> str | Path:  # TODO
     """Return datadir based on the system install and config settings.
 
     Returns
@@ -43,7 +43,7 @@ def return_datadir() -> str | Path:
     # Default is to use the local repo if this is an editable install
     if check_install_status() == "Editable":
         datadir = ROOT_DIR.parent
-        return datadir
+        return Path(datadir)
     # If fully installed (not editable), then use the user defined config
     elif check_install_status() == "Install":
         # Read the config file into the configparser object
@@ -52,14 +52,14 @@ def return_datadir() -> str | Path:
         if config.get("DATADIR", "ROOT") == "~":
             datadir = Path("~").expanduser()
             return datadir
-        # setting could be a subdir within ~
+        # Setting could be a subdir within ~
         elif "~" in config.get("DATADIR", "ROOT"):
             datadir = Path(config.get("DATADIR", "ROOT")).expanduser()
             return datadir
         # User may set their own directory (other than home)
         else:
             datadir = config.get("DATADIR", "ROOT")
-            return datadir
+            return Path(datadir)
     else:
         raise ConfigException("System config error: check system installation status.")
     # TODO add call to logger here to capture exception
@@ -80,7 +80,7 @@ def return_outputs() -> Path:
     Returns
     -------
     Path
-        The current outputs directory
+        The current outputs directory as a full path
     """
     # Read the config file into the configparser object.
     config.read(configfile)
@@ -107,7 +107,7 @@ def return_inputs() -> str | Path:
     Returns
     -------
     str | Path
-        The current inputs directory
+        The current inputs directory as a full path
     """
     # Read the config file into the configparser object.
     config.read(configfile)
@@ -134,7 +134,7 @@ def return_scratch() -> str | Path:
     Returns
     -------
     str | Path
-        The current scratch directory
+        The current scratch directory as a full path
     """
     # Read the config file into the configparser object.
     config.read(configfile)
@@ -155,13 +155,36 @@ def return_scratch() -> str | Path:
     # ===================================================================
 
 
+def return_demo_temp() -> Path:
+    """Return demo_temp directory path.
+
+    Returns
+    -------
+    Path
+        The demo_temp directory as a full path
+    """
+    demo_temp_path = Path(return_datadir()) / "demo_temp"
+    if return_verbosity():
+        logger.debug(f"Demo_temp: {demo_temp_path}")
+    return demo_temp_path
+
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            config/test_reader.py TODO
+    # b_integration     test_config_reader.py TODO
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
+
+
 def return_logs_dir() -> Path:
     """Return the logs directory path from config.
 
     Returns
     -------
     Path
-        The current logs directory
+        The current logs directory as a full path
     """
     # Read the config file into the configparser object.
     config.read(configfile)
@@ -285,6 +308,7 @@ def log_config(log_dir_path: Path) -> str | Path:
         Inputs dir is: {return_inputs()}
         Scratch dir is: {return_scratch()}
         Logs dir is: {return_logs_dir()}
+        demo_temp dir is: {return_demo_temp()}
         Config logfile is: {log_for_config}
         System logfile is: {log_for_system}
         Log level: {return_log_level()}
