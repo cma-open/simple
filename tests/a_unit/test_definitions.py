@@ -1,8 +1,7 @@
 """Tests for the definitions module."""
 
+from simple.config.reader import return_verbosity
 from simple.definitions import PACKAGE, PACKAGE_DIR, RESOURCES, ROOT_DIR
-
-DEBUG = True
 
 
 def test_definitions_constants():
@@ -13,10 +12,8 @@ def test_definitions_constants():
 
 def test_definitions_directories():
     """Test for definitions module."""
-    # Optional, print info to tests
-    # TODO consider auto enable all debug for editable not user installs?
-    # See #36
-    if DEBUG:
+    # Optional, print further info to tests if verbose set on editable installs
+    if return_verbosity():
         print(f"Package name: {PACKAGE}")
         print(f"Package resources: {RESOURCES}")
         print(f"Package dir: {PACKAGE_DIR}")

@@ -15,13 +15,10 @@ from simple.config.reader import (
     return_logs_dir,
     return_outputs,
     return_scratch,
-    setup_directories,
 )
 from simple.definitions import RESOURCES
 
 TEST_CONFIGFILE = files(RESOURCES) / "test_config.ini"
-
-DEBUG = True
 
 
 # Patch out functions at the location used, not where defined
@@ -67,8 +64,9 @@ def test_return_datadir_full_conf(mock_install_status, mock_get):
     # Set return value for mocked .get function
     mock_get.return_value = "/home/example/user/temp"
     # Run function, with mocked content
+    # returned paths are always Path objects
     datadir = return_datadir()
-    assert datadir == "/home/example/user/temp"
+    assert datadir == PosixPath("/home/example/user/temp")
 
 
 @patch("simple.config.reader.check_install_status")  # Note the source!
@@ -176,25 +174,6 @@ def test_return_log_level():
         outputs = return_log_level()
         expected = "debug"
         assert outputs == expected
-
-
-# Test via creating dirs into tmp_path
-# Mock out the main return_datadir root dir with tmp_path
-@patch("simple.config.reader.return_datadir")
-def test_setup_directories(mock_datadir, tmp_path):
-    """Test setup_directories based on configfile."""
-    mock_datadir.return_value = tmp_path
-    with patch("simple.config.reader.configfile", TEST_CONFIGFILE):
-        # Create dirs, as specified by config file
-        setup_directories(datadir_root_path=tmp_path)
-        # Check expected files exist in the main root/data directory
-        expected_data_dirs = ["test_inputs", "test_outputs", "test_scratch"]
-        for subdir in expected_data_dirs:
-            subdir_path = tmp_path / "data" / subdir
-            assert subdir_path.is_dir()
-        # Check the logs dir has been created at root/logs
-        expected_logs_dir = "test_logs"
-        assert (tmp_path / expected_logs_dir).is_dir()
 
 
 # TODO !

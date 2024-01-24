@@ -6,12 +6,11 @@ from unittest.mock import patch
 import pytest
 
 from simple.common.common import StatusException, check_install_status, clean_directory
+from simple.config.reader import return_verbosity
 
 # List of data files generated and used within the system.
 # TODO move to use single source of FILES
 FILES = ["test.nc", "other.nc", "more.txt"]
-
-DEBUG = False
 
 
 @pytest.fixture
@@ -28,8 +27,8 @@ def test_clean_directory(tmp_path, create_files):
     # The pytest fixture create_files will have created file in tmp_path
     # Get a list of the files within tmp_path
     files = [file for file in tmp_path.iterdir()]
-    # Print files to the test report for debugging
-    if DEBUG:
+    # Print files to the test report for debugging if verbose editable install
+    if return_verbosity():
         print("Files exist:")
         print(*files, sep="\n")
     # Run clean directory function
@@ -38,7 +37,8 @@ def test_clean_directory(tmp_path, create_files):
     contains_files = any(tmp_path.iterdir())  # False if empty
     # Test that all files have been removed
     assert contains_files is False
-    if DEBUG:
+    # Print files to the test report for debugging if verbose editable install
+    if return_verbosity():
         print("Files in tmp_path:")
         # Check again if any files exist within tmp_path
         files = [file for file in tmp_path.iterdir()]

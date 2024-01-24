@@ -4,11 +4,12 @@
 Generates main package name and directory for use by other modules.
 
 """
-
 from importlib.resources import files
 from pathlib import Path
 
-# Set the package name
+# Note - no use of logging in this mnodule due to root location and content
+
+# Set the package name (works because file is at package root)
 PACKAGE = __package__
 # TODO refactor to give full path or as new RESORCES_DIR
 # Set namespace subpackage holding resource files
@@ -22,8 +23,7 @@ PACKAGE_DIR = files(PACKAGE)
 ROOT_DIR = Path(files(PACKAGE)).parent
 
 RESOURCES_DIR = ROOT_DIR / PACKAGE / "resources"
-DEMOS_DIR = ROOT_DIR / PACKAGE / "demos"
-DEMO_TEMP_DIR = ROOT_DIR / PACKAGE / "demo_temp"
+
 
 # ===================================================================
 # Test type and location (training use)

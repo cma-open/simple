@@ -12,9 +12,8 @@ from pathlib import Path
 import pytest
 
 from simple.cli import cli_entry_point
+from simple.config.reader import return_verbosity
 from simple.definitions import PACKAGE_DIR
-
-DEBUG = True
 
 # Define cli filepath
 CLI = Path(PACKAGE_DIR, "cli.py")
@@ -60,7 +59,7 @@ def test_cli_with_user_args():
         capture_output=True,
         text=True,
     )  # nosec  # bandit ignore
-    if DEBUG:
+    if return_verbosity():
         # print to show CompletedProcess object and args, stdout, stderr, etc
         print(out)
     # Check if exit code indicates success (0 = success)
@@ -95,7 +94,7 @@ def test_cli_with_user_args_various(x, y, expected):
         capture_output=True,
         text=True,
     )  # nosec  # bandit ignore
-    if DEBUG:
+    if return_verbosity():
         # print to show CompletedProcess object and args, stdout, stderr, etc
         print(out)
     # Check if exit code indicates success (0 = success)
@@ -171,7 +170,8 @@ def test_cli_with_user_args_raises_errors_message():
         text=True,
     )  # nosec  # bandit ignore
     # note check=False to prevent error code
-    print(out.stderr)
+    if return_verbosity():
+        print(out.stderr)
     message = out.stderr
     expected = (
         "CLI-SIMPLE: error: argument x: invalid choice: 1000 "
@@ -216,7 +216,8 @@ def test_cli_with_user_args_raises_errors_message_various(x, y, expected):
         text=True,
     )  # nosec  # bandit ignore
     # note check=False to prevent error code
-    print(out.stderr)
+    if return_verbosity():
+        print(out.stderr)
     message = out.stderr
     assert expected in message
 
@@ -240,8 +241,7 @@ message_invalid_too_many = "CLI-SIMPLE: error: unrecognized arguments: "
     [
         (uargs_x, message_invalid_x),
         (uargs_y, message_invalid_y),
-        (uargs_too_many, message_invalid_too_many)
-        # ("-55", "-55", message_invalid_x_y),
+        (uargs_too_many, message_invalid_too_many),
     ],
 )
 def test_cli_with_user_args_raises_errors_message_various2(uargs, expected):
@@ -257,7 +257,8 @@ def test_cli_with_user_args_raises_errors_message_various2(uargs, expected):
         text=True,
     )  # nosec  # bandit ignore
     # note check=False to prevent error code
-    print(out.stderr)
+    if return_verbosity():
+        print(out.stderr)
     message = out.stderr
     assert expected in message
 

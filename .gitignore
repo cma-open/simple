@@ -1,5 +1,7 @@
 # Temp directory within repo root
 temp/
+# demo_temp dir within repo root
+demo_temp/
 
 # _version file created by setuptools_scm
 src/simple/_version.py

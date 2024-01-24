@@ -10,12 +10,10 @@ build-backend = "setuptools.build_meta"
 name = "simple"
 authors = [
     {name = "Jonathan Winn"},
-    #{name = "Jonathan Winn", email = "N/A"},
 ]
 description = "A simple python package with command line tools and test examples."
 readme = "README.md"
 requires-python = ">=3.10"
-#license = {text = "BSD-3-Clause"}
 license = {file = "LICENSE"}
 dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 
@@ -36,19 +34,22 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 # Set all command line scripts
 # These are added as command line options once the system is installed
 [project.scripts]
-my-script = "my_package.module:function"
-# Name cli-simple command (uses argparse)
-cli-simple  = "simple.cli:cli_entry_point"
-# Name confirm-config command
-confirm-config = "simple.config.reader:main"
-# Name create-data command (cf with options)
-create-data = "simple.netcdf.data:main"
-# Name create-data-options command (uses argparse)
-create-data-options = "simple.cli:cli_data"
-# Name clean command
-clean = "simple.io.io:main"
-# Name demo_temp command
-demo = "simple.demos.demos:demo_logs"
+# format is: my-script = "my_package.module:function"
+
+# Tested + working - tools using argparse
+cli-simple  = "simple.cli:cli_entry_point"  # uses argparse
+create-data-options = "simple.cli:cli_data"  # uses argparse
+
+# Tested + working - no use of argparse
+system-version = "simple.status.checks:show_version"  # no argparse
+show-loggers = "simple.status.checks:show_loggers"  # no argparse
+confirm-config = "simple.status.checks:confirm_config"  # no argparse
+
+# Tested + working
+
+create-data = "simple.netcdf.data:main"  # no argparse
+clean = "simple.io.io:main"  # no argparse
+demo-logs = "simple.demos.demos:demo_logs"  # no argparse
 
 
 [tool.setuptools_scm]
