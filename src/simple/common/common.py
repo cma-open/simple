@@ -87,7 +87,14 @@ def debug_loggers() -> None:
     loggers = loggers + [
         logging.getLogger(name) for name in logging.root.manager.loggerDict
     ]
-    print("--------------------------------------------------")
     for logger in loggers:
         print(logger, logger.handlers)
-    print("--------------------------------------------------")
+
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            common/test_common.py
+    # b_integration     N/A
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
