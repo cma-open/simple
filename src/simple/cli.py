@@ -21,9 +21,8 @@ from simple.netcdf.data import main
 # Take the version number from the package version
 pkg_version = version(PACKAGE)
 
-# Note - reminder (keep) no need to setup logging as access to any of the system
-# subpackages will use an instantiated logger
-# do not call setup_system_log()
+# Note - reminder (keep) no need to setup logging
+# Already instantiated logger
 
 # Set module logger
 logger = logging.getLogger(__name__)
@@ -34,14 +33,10 @@ def cli_entry_point(argv: list[str] | None = None) -> None:
 
     Parameters
     ----------
-    argv : list[str]
+    argv : list[str] | None
            List of arguments supplied via the command line
            Default of none is used to trigger accepting supplied arguments from the
            command line when called via an entry point.
-
-    Returns
-    -------
-    None
     """
     parser = argparse.ArgumentParser(
         prog="CLI-SIMPLE",
