@@ -1,4 +1,4 @@
-"""Unit tests for the demos module."""
+"""Integration tests for the demos module."""
 
 import re
 
@@ -13,7 +13,6 @@ from simple.demos.demos import demo_config_file_log
 
 def test_demo_config_file_log_no_console(tmp_path, capsys):
     """Test the demo_config_logger function."""
-    # Unit test so requires controlling function subcalls
     # Context / reminder
     # func creates named logger with file handler and DEBUG level
     # no console handler is used
