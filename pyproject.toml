@@ -51,6 +51,21 @@ create-data = "simple.netcdf.data:main"  # no argparse
 clean = "simple.io.io:main"  # no argparse
 demo-logs = "simple.demos.demos:demo_logs"  # no argparse
 
+# ===================================================================
+# Test type and location (training use)
+# ===================================================================
+#                           c_end_to_end         d_user_interface
+# cli-simple
+# create-data-options
+# system-version
+# show-loggers
+# confirm-config
+# create-data
+# clean
+# demo-logs
+# ===================================================================
+
+
 
 [tool.setuptools_scm]
 #  keyword arguments to be supplied to get_version().
