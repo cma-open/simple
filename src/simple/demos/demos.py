@@ -139,7 +139,7 @@ def demo_logs(demo_temp_dir=None):
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
-    # a_unit
+    # a_unit            demos/test_demo_logs.py
     # b_integration     test_demo_logs.py
     # c_end_to_end      N/A
     # d_user_interface  N/A
