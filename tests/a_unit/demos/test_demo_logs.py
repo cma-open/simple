@@ -2,18 +2,41 @@
 
 import logging
 import re
+from pathlib import Path
 from unittest.mock import patch
 
-from simple.demos.demos import demo_config_file_log, demo_system_console_log
+from simple.demos.demos import demo_config_file_log, demo_logs, demo_system_console_log
 
 # Set test module constants
 # Set expected logger names
 DEMO_CONFIG_LOGGER_NAME = "DemoConfigLog"
 DEMO_SYSTEM_LOGGER_NAME = "DemoSystemLog"
 
+TESTS_CONSOLE_FORMATTER = logging.Formatter(
+    fmt="%(name)-28s: %(levelname)-8s: %(message)s",
+)
+
+TESTS_FILE_FORMATTER = logging.Formatter(
+    fmt="%(asctime)s : %(name)s : %(levelname)s "
+    ": %(message)s : %(filename)s -> %(funcName)s()",
+    datefmt="%y-%m-%d %H:%M",
+)
+
+# Reduced output for the simple config log file
+# Gives timestamp and message (no module name)
+TESTS_CONFIG_FILE_FORMATTER = logging.Formatter(
+    fmt="%(asctime)s %(message)s",
+    datefmt="%y-%m-%d %H:%M",
+)
+
+
 # --------------------------------------------------------------------------------------
 # Test for log outputs from demo_temp functions
 # --------------------------------------------------------------------------------------
+
+# ----------
+# Config log
+# ----------
 
 
 def config_side_effect_func(log_path, logger_name):
@@ -162,7 +185,7 @@ def side_effect_func(log_path, logger_name, file_handler_name=None):
 # create_system_logger
 def test_demo_system_console_log(tmp_path, caplog, capsys):
     """Test the demo_system_console_log function."""
-    log_file = tmp_path / "test.log"
+    log_file = tmp_path / "demo_unit_test.log"
     # create_system_logger(log_path=log_path, logger_name=DEMO_SYSTEM_LOGGER_NAME,
     #                     file_handler_name=file_handler_name)
     with patch(
@@ -211,21 +234,126 @@ def test_demo_system_console_log(tmp_path, caplog, capsys):
         assert captured.err == expected
 
 
-# def test_demo_system_console_log_console(tmp_path, capsys):
-#     """Test the demo_system_console_log function."""
-#     log_file = tmp_path / "test.log"
-#     # Run the demo log (logs to both file and to console)
-#     demo_system_console_log(log_file)
-#
-#     # Test output to console - as captured by capsys
-#     # Expect only .info level and above to console
-#     # Capture console output during test
-#     captured = capsys.readouterr()
-#
-#     print("-")
-#     print(captured)
-#     print("-")
-#     # Only expect one line of output to console
-#     expected = "DEMOLog                     : INFO    : System demo_temp\n"
-#     # Test that only some output to console
-#     assert captured.out == expected
+# ----------------------------------------------
+# Demo logs - combined system console and config
+# ----------------------------------------------
+
+
+# Create side_effects
+def side_effect_func_console(log_path: Path, logger_name: str = None):
+    """Side effect to mimic the demo_system_console function."""
+    # Reminder - info level and above goes to console
+    # debug level and above go to file
+    # Reminder create_system_logger gets logger by name, but defaults to package logger
+    # Then sets level and adds file handler only, it assumes that the console handler
+    # exists already
+    # Therefore for the DEMO - create a new logger instead of PACKAGE level logger
+    # and add a system console handler
+    if logger_name is None:
+        logger_name = DEMO_SYSTEM_LOGGER_NAME
+    # Set logger name - create new logger
+    logger = logging.getLogger(logger_name)
+    # Set initial logging level (required)
+    logger.setLevel(level=logging.DEBUG)
+    # Add console handler
+    # Set default handler name if no argument supplied
+    console_handler_name = "DemoSystemConsoleHandler"
+    # Create console log stream handler
+    console_handler = logging.StreamHandler()
+    # Name the console handler via argument or default
+    console_handler.name = console_handler_name
+    # Set level for console outputs - only info level and above
+    console_handler.setLevel(logging.INFO)
+    # Set the output format for the logger content
+    console_handler.setFormatter(TESTS_CONSOLE_FORMATTER)
+    # Add handler to the logger
+    logger.addHandler(console_handler)
+    # Add handlers to the logger
+    # info level and above goes to console (already set by init)
+    # debug level and above go to file
+    # Set handler name
+    file_handler_name = "SystemFileHandler"
+    # Create main system log handler
+    file_handler = logging.FileHandler(log_path, mode="a")
+    # Name the console handler via argument or default
+    file_handler.name = file_handler_name
+    # Set level for log file - debug and above
+    file_handler.setLevel(logging.DEBUG)
+    # Add content formatter to the logger
+    file_handler.setFormatter(TESTS_FILE_FORMATTER)
+    # Add handler to the logger
+    logger.addHandler(file_handler)
+    # All log messages go to log file
+    # Additionally info level and above go to console
+    logger.debug("TESTS System demo_temp started")  # File only
+    logger.info("TESTS System demo_temp")  # File and console
+    logger.debug("TESTS System demo_temp finished")  # File only
+    return logger
+
+
+def side_effect_func_config(log_path):
+    """Mimic the demo_config_file_log function."""
+    # No console handler so no terminal output
+    logger_name = DEMO_CONFIG_LOGGER_NAME
+    # Get logger by name
+    logger = logging.getLogger(logger_name)
+    # Set handler name
+    handler_name = "ConfigFileHandler"
+    file_handler = logging.FileHandler(log_path, mode="w")
+    # Name the console handler via argument or default
+    file_handler.name = handler_name
+    # Set logging level
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(TESTS_CONFIG_FILE_FORMATTER)
+    # Add handler to the logger
+    logger.addHandler(file_handler)
+    # Set level for logger
+    logger.setLevel(logging.DEBUG)
+    # Log message to write to the config log file
+    logger.debug("TESTS Config demo_temp started")
+    logger.info("TESTS Config demo_temp")
+    logger.debug("TESTS Config demo_temp finished")
+
+
+# unit test so need to mock out intermediate calls
+def test_demo_logs(tmp_path, caplog, capsys):
+    """Test the demo_logs function."""
+    # Run the function, but mock component calls
+    # In this limited example this just tests the isolated system log
+    # call within demo_logs
+    with patch(
+        "simple.demos.demos.demo_system_console_log",
+        side_effect=side_effect_func_console,
+    ):
+        with patch(
+            "simple.demos.demos.demo_config_file_log",
+            side_effect=side_effect_func_config,
+        ):
+            demo_logs(demo_temp_dir=tmp_path)
+            demo_system_log = tmp_path / "demo_system.log"
+            demo_config_log = tmp_path / "demo_config.log"
+            # Test files have been created
+            assert demo_system_log.is_file()
+            assert demo_config_log.is_file()
+            # Test for expected number of log records in log
+            # file (config, console, system)
+            assert len(caplog.records) == 7
+            # Check the log output to config, system, console are as expected
+            # Set path to tmp for use in tests
+            tmp_path_string = str(tmp_path)
+            # List expected log records, as tuples
+            expected_log_records = [
+                ("DemoSystemLog", 10, "TESTS System demo_temp started"),
+                ("DemoSystemLog", 20, "TESTS System demo_temp"),
+                ("DemoSystemLog", 10, "TESTS System demo_temp finished"),
+                ("DemoConfigLog", 10, "TESTS Config demo_temp started"),
+                ("DemoConfigLog", 20, "TESTS Config demo_temp"),
+                ("DemoConfigLog", 10, "TESTS Config demo_temp finished"),
+                (
+                    "simple.demos.demos",
+                    20,
+                    f"Demo logs has run - see files in {tmp_path_string}",
+                ),
+            ]
+            # check log records are as expected
+            assert caplog.record_tuples == expected_log_records

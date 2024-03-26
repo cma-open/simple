@@ -14,8 +14,7 @@ Example:
 import logging
 from pathlib import Path
 
-from simple.common.common import debug_loggers
-from simple.config.reader import return_datadir, return_verbosity
+from simple.config.reader import return_datadir
 from simple.logger.log import (
     console_formatter,
     create_config_logger,
@@ -55,7 +54,7 @@ def demo_config_file_log(log_path):
     # ===================================================================
 
 
-def demo_system_console_log(log_path: Path):
+def demo_system_console_log(log_path: Path, logger_name: str = None):
     """Demo of system console log write and content.
 
     Parameters
@@ -74,8 +73,10 @@ def demo_system_console_log(log_path: Path):
     # exists already
     # Therefore for the DEMO - create a new logger instead of PACKAGE level logger
     # and add a system console handler
+    if logger_name is None:
+        logger_name = DEMO_SYSTEM_LOGGER_NAME
     # Set logger name - create new logger
-    logger = logging.getLogger(DEMO_SYSTEM_LOGGER_NAME)
+    logger = logging.getLogger(logger_name)
     # Set initial logging level (required)
     logger.setLevel(level=logging.DEBUG)
     # Add console handler
@@ -95,7 +96,7 @@ def demo_system_console_log(log_path: Path):
     # Update the demo logger with file logger
     create_system_logger(
         log_path=log_path,
-        logger_name=DEMO_SYSTEM_LOGGER_NAME,
+        logger_name=logger_name,
         file_handler_name=file_handler_name,
     )
     # All log messages go to log file
@@ -119,7 +120,7 @@ def demo_logs(demo_temp_dir=None):
     """Demo for log setup and creation."""
     # Dev Note - all log files should be ignored via vcs
     # Note - for dev install demo_temp will be within repo
-    # Note - for a full install demo_temp will be within datadir root
+    # Note - for a full installation demo_temp will be within datadir root
     if demo_temp_dir is None:
         demo_temp_dir = DEMO_TEMP_DIR
     # Create DEMO_TEMP_DIR if not yet existing
@@ -132,15 +133,14 @@ def demo_logs(demo_temp_dir=None):
     # Run the demo to create config file logs - including demo log messages
     demo_config_file_log(log_path=demo_config_log)
     # Add an extra log message at system level
+    # NOTE - reminder this is to main system logger, not demo logger
     system_logger.info(f"Demo logs has run - see files in {demo_temp_dir}")
-    # Optional show all current logger handlers as debugging or training example
-    if return_verbosity():
-        debug_loggers()
+
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
     # a_unit
-    # b_integration
+    # b_integration     test_demo_logs.py
     # c_end_to_end      N/A
     # d_user_interface  N/A
     # ===================================================================

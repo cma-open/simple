@@ -91,7 +91,7 @@ def test_demo_config_file_log_file_content(tmp_path):
 
 def test_demo_system_console_log(tmp_path, caplog, capsys):
     """Test the demo_system_console_log function."""
-    log_file = tmp_path / "test.log"
+    log_file = tmp_path / "demo_integration_test.log"
     # Run the demo log (logs to both file and to console)
     test_logger = demo_system_console_log(log_file)
     # Test expected log level has been set DEBUG = 10
@@ -122,10 +122,19 @@ def test_demo_system_console_log(tmp_path, caplog, capsys):
         for handler in test_logger.handlers
         if handler.name == "DemoSystemFileHandler"
     ]
+
+
+def test_demo_system_console_log_output(tmp_path, capsys):
+    """Test the demo_system_console_log function - console output."""
+    log_file = tmp_path / "demo_integration_test_out.log"
+    # Note - this prevents problems with file and logger conflicts
+    logger_name = "TestDemoSystemLog"
+    # Run the demo log (logs to both file and to console)
+    demo_system_console_log(log_file, logger_name=logger_name)
     # Confirm that only one record - info level - was output to terminal
     captured = capsys.readouterr()
     # Only expect one line of output to console
-    expected = "DemoSystemLog               : INFO    : System demo_temp\n"
+    expected = "TestDemoSystemLog           : INFO    : System demo_temp\n"
     # Test that only some output to console
     assert captured.err == expected
 
@@ -135,7 +144,7 @@ def test_demo_system_console_log(tmp_path, caplog, capsys):
 # ----------
 
 
-def test_demo_logs(tmp_path):
+def test_demo_logs(tmp_path, caplog, capsys):
     """Test the demo_logs function."""
     demo_logs(demo_temp_dir=tmp_path)
     demo_system_log = tmp_path / "demo_system.log"
@@ -143,4 +152,24 @@ def test_demo_logs(tmp_path):
     # Test files have been created
     assert demo_system_log.is_file()
     assert demo_config_log.is_file()
-    # Test system log content
+    # Test for expected number of log records in log file (config, console, system)
+    assert len(caplog.records) == 7
+    # Check the log output to config, system, console are as expected
+    # Set path to tmp for use in tests
+    tmp_path_string = str(tmp_path)
+    # List expected log records, as tuples
+    expect_log_records = [
+        ("DemoSystemLog", 10, "System demo_temp started"),
+        ("DemoSystemLog", 20, "System demo_temp"),
+        ("DemoSystemLog", 10, "System demo_temp finished"),
+        ("DemoConfigLog", 10, "Config demo_temp started"),
+        ("DemoConfigLog", 20, "Config demo_temp"),
+        ("DemoConfigLog", 10, "Config demo_temp finished"),
+        (
+            "simple.demos.demos",
+            20,
+            f"Demo logs has run - see files in {tmp_path_string}",
+        ),
+    ]
+    # check log records are as expected
+    assert caplog.record_tuples == expect_log_records
