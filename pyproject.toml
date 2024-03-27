@@ -36,20 +36,35 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 [project.scripts]
 # format is: my-script = "my_package.module:function"
 
-# Tested + working - tools using argparse
-cli-simple  = "simple.cli:cli_entry_point"  # uses argparse
-create-data-options = "simple.cli:cli_data"  # uses argparse
+# Tested + working - (tools using argparse)
+cli-simple  = "simple.cli:cli_entry_point"
+create-data-options = "simple.cli:cli_data"
+cli-demo-logs = "simple.demos.demos:demo_logs_cli_entry_point"
+# ---
 
 # Tested + working - no use of argparse
-system-version = "simple.status.checks:show_version"  # no argparse
-show-loggers = "simple.status.checks:show_loggers"  # no argparse
-confirm-config = "simple.status.checks:confirm_config"  # no argparse
+system-version = "simple.status.checks:show_version"
+show-loggers = "simple.status.checks:show_loggers"
+confirm-config = "simple.status.checks:confirm_config"
+create-data = "simple.netcdf.data:main"
+clean = "simple.io.io:main"
+demo-logs = "simple.demos.demos:demo_logs"
 
-# Tested + working
+# ===================================================================
+# Test type and location (training use)
+# ===================================================================
+#                           c_end_to_end       d_user_interface
+# cli-simple
+# create-data-options
+# cli-demo-logs                 N/A            test_demo_cli.py
 
-create-data = "simple.netcdf.data:main"  # no argparse
-clean = "simple.io.io:main"  # no argparse
-demo-logs = "simple.demos.demos:demo_logs"  # no argparse
+# system-version
+# show-loggers
+# confirm-config
+# create-data
+# clean
+# demo-logs                    N/A             test_demos_cli.py
+# ===================================================================
 
 
 [tool.setuptools_scm]
