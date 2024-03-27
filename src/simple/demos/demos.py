@@ -11,6 +11,7 @@ Example:
     $ demo-logs
 
 """
+import argparse
 import logging
 from pathlib import Path
 
@@ -142,5 +143,70 @@ def demo_logs(demo_temp_dir=None):
     # a_unit            demos/test_demo_logs.py
     # b_integration     test_demo_logs.py
     # c_end_to_end      N/A
-    # d_user_interface  N/A
+    # d_user_interface  N/A (see pyproject.toml)
+    # ===================================================================
+
+
+def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
+    """Argparse wrapped function to call demo logs.
+
+    Parameters
+    ----------
+    argv : list[str] | None
+           List of arguments supplied via the command line
+           Default of none is used to trigger accepting supplied arguments from the
+           command line when called via an entry point.
+    """
+    # This shows additional functionality of argparse
+    # Also shows additional testing potential
+    # Illustrates a dry-run option
+    parser = argparse.ArgumentParser(
+        prog="CLI-DEMO-LOGS",
+        description="A command line tool to demo logs.",
+        epilog="  ---  ",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    # Arguments in argparse can be positional or optional
+    # Set the argument type and limit choices from a list
+    parser.add_argument(
+        "demo_log_dir", help="Directory to write demo logs to", default=None, nargs="?"
+    )
+    # nargs ? single value, but optional
+    parser.add_argument(
+        "-d",
+        "--dry",
+        action="store_true",
+        help="Run the command without enacting full functionality",
+    )
+
+    # Run the parser and place the extracted data in an argparse.Namespace
+    parsed_args = parser.parse_args(argv)
+    # dry run option just logs a message, no demo logs are created
+    if parsed_args.dry:
+        system_logger.debug(f"{parser.prog} command run in dry-run mode. Exiting")
+
+    else:
+        # TODO ideally validate and check path dir input - demo_log_dir
+        # For any set demo_temp paths, ensure Path object
+        if parsed_args.demo_log_dir:
+            # Convert back to a path object
+            demo_log_dir_path = Path(parsed_args.demo_log_dir)
+        else:
+            demo_log_dir_path = parsed_args.demo_log_dir
+        # Run demo_logs function with args
+        demo_logs(demo_temp_dir=demo_log_dir_path)
+        # Log that the cli tool is running, with args
+        system_logger.debug(f"Running cli-demo-logs tool with: {parsed_args}")
+
+    # Note cli tools may be expected to return none or 0 for testing
+    # Note when developing cli tools, check for returncode if used and
+    # compare use when called via function (no code) vs CLI tool (rtn code).
+
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO
+    # b_integration     TODO
+    # c_end_to_end      ?
+    # d_user_interface  N/A (see pyproject.toml)
     # ===================================================================
