@@ -29,12 +29,25 @@ PKG_VERSION = version(PACKAGE)
 
 def return_outfile(path, filename):
     """Return full filepath to file."""
+    # TODO docstring and params
     output_file = path / filename
     return output_file
 
 
+# ==================================================================================
+# Test type and location (training use)
+# ----------------------------------------------------------------------------------
+# a_unit  netcdf/test_data_unit.py
+# b_integration  n/a
+# c_end_to_end  n/a
+# d_user_interface  n/a
+# e_performance n/a
+# ==================================================================================
+
+
 def create_d(netcdf, debug=None):
     """Create a netcdf data file in the data dir (as specified via config.ini)."""
+    # TODO docstring and params
     # Set filename, mode and type
     ds = nc.Dataset(netcdf, mode="w", format="NETCDF4")
     # Create dimensions
@@ -70,6 +83,17 @@ def create_d(netcdf, debug=None):
         print("var size after adding first data", value.shape)
     ds.close()
     #  west (-180) to east (180)
+
+
+# ==================================================================================
+# Test type and location (training use)
+# ----------------------------------------------------------------------------------
+# a_unit  netcdf/create_d_unit.py
+# b_integration  n/a
+# c_end_to_end  n/a
+# d_user_interface  n/a
+# e_performance n/a
+# ==================================================================================
 
 
 def add_metadata(netcdf):
