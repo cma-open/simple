@@ -7,6 +7,10 @@ import pytest
 from simple.config.reader import return_verbosity
 from simple.io.io import FILES, main
 
+# Caveat
+# ======
+# Code may be over-tested to ensure tests act as examples of what is possible
+
 
 @pytest.fixture
 def create_files(tmp_path):
