@@ -104,7 +104,7 @@ def mock_add_metadata(netcdf):
         ds.history = "Created " + today.strftime("%d/%m/%y")
 
 
-def mock_set_cf_convention_level(netcdf, cf=None):
+def mock_set_cf_convention_level(netcdf, cf_version=None):
     """Add cf convention setting."""
     with nc.Dataset(netcdf, mode="a") as ds:  # note append mode
         ds.Conventions = "cf:mocked"

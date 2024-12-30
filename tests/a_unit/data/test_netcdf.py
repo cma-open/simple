@@ -171,7 +171,7 @@ def test_add_metadata(create_base):
 
 def test_add_cf(create_base):
     """Test add cf convention level."""
-    set_cf_convention_level(create_base, cf="test-value")
+    set_cf_convention_level(create_base, cf_version="test-value")
     with nc.Dataset(create_base, mode="r", format="NETCDF4") as ds:
         # check the cf convention
         expected_cf = "test-value"
