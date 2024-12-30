@@ -37,7 +37,7 @@ def return_outfile(path, filename):
 # ==================================================================================
 # Test type and location (training use)
 # ----------------------------------------------------------------------------------
-# a_unit  netcdf/test_data_unit.py
+# a_unit  /netcdf/test_data_unit.py
 # b_integration  n/a
 # c_end_to_end  n/a
 # d_user_interface  n/a
@@ -45,7 +45,7 @@ def return_outfile(path, filename):
 # ==================================================================================
 
 
-def create_d(netcdf, debug=None):
+def create_d(netcdf):
     """Create a netcdf data file in the data dir (as specified via config.ini)."""
     # TODO docstring and params
     # Set filename, mode and type
@@ -79,8 +79,7 @@ def create_d(netcdf, debug=None):
     xval = np.linspace(0.5, 5.0, 10)
     yval = np.linspace(0.5, 5.0, 10)
     value[1, :, :] = np.array(xval.reshape(-1, 1) + yval)  # linear gradient values
-    if debug:
-        print("var size after adding first data", value.shape)
+    logger.debug(f"var size after adding first data: {value.shape}")
     ds.close()
     #  west (-180) to east (180)
 
@@ -88,7 +87,7 @@ def create_d(netcdf, debug=None):
 # ==================================================================================
 # Test type and location (training use)
 # ----------------------------------------------------------------------------------
-# a_unit  netcdf/create_d_unit.py
+# a_unit  /netcdf/test_data_unit.py
 # b_integration  n/a
 # c_end_to_end  n/a
 # d_user_interface  n/a
@@ -108,27 +107,55 @@ def add_metadata(netcdf):
         # TODO - add distinction software version vs dataset version
 
 
-def set_cf_convention_level(netcdf, cf=None):
+# ==================================================================================
+# Test type and location (training use)
+# ----------------------------------------------------------------------------------
+# a_unit  /netcdf/test_d_unit.py
+# b_integration  n/a
+# c_end_to_end  n/a
+# d_user_interface  n/a
+# e_performance n/a
+# ==================================================================================
+
+
+def set_cf_convention_level(netcdf, cf_version=None):
     """Add cf convention setting."""
     with nc.Dataset(netcdf, mode="a") as ds:  # note append mode
-        ds.Conventions = cf
+        ds.Conventions = cf_version
 
 
-def main(debug=None):
+# ==================================================================================
+# Test type and location (training use)
+# ----------------------------------------------------------------------------------
+# a_unit  /netcdf/test_data_unit.py
+# b_integration  n/a
+# c_end_to_end  n/a
+# d_user_interface  n/a
+# e_performance n/a
+# ==================================================================================
+
+
+def main(debug=None, cf_version="CF:1.6"):
     """Process main netcdf file creation workflow."""
-    logger.debug("Creating netcdf data")
     output_file = return_outfile(return_outputs(), DATAFILE)
-    if debug:
-        print("Creating data - netcdf ")
-        print(f"File: {output_file}")
-    create_d(output_file, debug=debug)
+    logger.debug(f"Creating netcdf data: {output_file}")
+    create_d(output_file)
     add_metadata(output_file)
-    set_cf_convention_level(output_file, cf="CF:1.6")
+    set_cf_convention_level(output_file, cf_version=cf_version)
     if debug:
         print_netcdf_content(output_file)
         print_netcdf_dimensions(output_file)
         print_netcdf_variables(output_file)
     logger.info(f"Netcdf data created at {output_file}")
+    # lat, lon = f.variables['Latitude'], f.variables['Longitude']
 
 
-# lat, lon = f.variables['Latitude'], f.variables['Longitude']
+# ==================================================================================
+# Test type and location (training use)
+# ----------------------------------------------------------------------------------
+# a_unit  /netcdf/test_data_unit.py
+# b_integration  n/a
+# c_end_to_end  n/a
+# d_user_interface  n/a
+# e_performance n/a
+# ==================================================================================
