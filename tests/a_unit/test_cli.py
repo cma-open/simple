@@ -58,7 +58,7 @@ def test_cli_entry_point(mock_calculate, capsys):
 
 
 @pytest.fixture
-def create_d(netcdf, debug=None):
+def create_d(netcdf):
     """Create a netcdf data file."""
     # Set filename, mode and type
     ds = nc.Dataset(netcdf, mode="w", format="NETCDF4")
@@ -91,8 +91,6 @@ def create_d(netcdf, debug=None):
     xval = np.linspace(0.5, 5.0, 10)
     yval = np.linspace(0.5, 5.0, 10)
     value[1, :, :] = np.array(xval.reshape(-1, 1) + yval)  # linear gradient values
-    if debug:
-        print("var size after adding first data", value.shape)
     ds.close()
 
 
