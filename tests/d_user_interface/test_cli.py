@@ -216,6 +216,8 @@ def test_cli_with_user_args_raises_errors_message_various(x, y, expected):
     if return_verbosity():
         print(out.stderr)
     message = out.stderr
+    print(f"Expected: {expected}")
+    print(f"Actual: {message}")
     assert expected in message
 
 
