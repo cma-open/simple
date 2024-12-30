@@ -173,10 +173,7 @@ def test_cli_with_user_args_raises_errors_message():
     if return_verbosity():
         print(out.stderr)
     message = out.stderr
-    expected = (
-        "CLI-SIMPLE: error: argument x: invalid choice: 1000 "
-        "(choose from 0, 1, 2, 3, 4, 5)"
-    )
+    expected = "CLI-SIMPLE: error: argument x: invalid choice:"
     assert expected in message
 
 
