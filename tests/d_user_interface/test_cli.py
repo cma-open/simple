@@ -179,15 +179,15 @@ def test_cli_with_user_args_raises_errors_message():
 
 message_invalid_x = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: 10000 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '10000' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 message_invalid_y = (
     "CLI-SIMPLE: error: argument y: "
-    "invalid choice: -3 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-3' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 message_invalid_x_y = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: -55 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-55' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 
 
@@ -224,12 +224,12 @@ def test_cli_with_user_args_raises_errors_message_various(x, y, expected):
 uargs_x = "10000", "2"
 message_invalid_x = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: 10000 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '10000' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 uargs_y = "2", "-3"
 message_invalid_y = (
     "CLI-SIMPLE: error: argument y: "
-    "invalid choice: -3 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-3' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 uargs_too_many = "1", "2", "3"
 message_invalid_too_many = "CLI-SIMPLE: error: unrecognized arguments: "

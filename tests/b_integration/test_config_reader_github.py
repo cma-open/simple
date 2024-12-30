@@ -33,6 +33,6 @@ def test_return_datadir_full_install_github():
             mock_install_status.return_value = "Install"
             # Get datadir (will always be a Path object)
             datadir = return_datadir()
-            expected = PosixPath("/home/github/temp")
+            expected = PosixPath("/home/runner/work")
             assert datadir == expected
     # Editable and home ~ directory based confg options not tested here, see unit tests
