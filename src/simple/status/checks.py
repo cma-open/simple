@@ -21,7 +21,7 @@ from simple.logger.log import CONFIG_LOG_FILE, SYSTEM_LOG_FILE
 logger = logging.getLogger(__name__)
 
 
-def show_version():
+def show_version() -> None:
     """Show current system package version to terminal and log."""
     system_version = version(PACKAGE)
     logger.info(f"System version: {PACKAGE}-{system_version}")
@@ -83,7 +83,7 @@ def confirm_config() -> None:
 
 
 def show_loggers():
-    """Show loggers available to the  system."""
+    """Show loggers available to the system."""
     # Get all logger objects
     loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
     # Print full list of loggers for verbose editable installs

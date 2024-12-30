@@ -41,8 +41,8 @@ def check_install_status(display=None) -> str:
     else:
         raise StatusException("System status error: Unknown path or not installed")
         # TODO log error
-
     # change to raise error and then capture in logs
+    # Downstream uses of check_install_status dont need to check for invalid install
 
     # ===================================================================
     # Test type and location (training use)

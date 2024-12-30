@@ -26,6 +26,19 @@ else:
 # Add note here and link to the package system strategy for logging
 # e.g. log output, file vs. terminal, module level etc.
 
+# Contents
+# ========
+# return_datadir
+# return_outputs
+# return_inputs
+# return_scratch
+# return_demo_temp
+# return_logs_dir
+# return_log_level
+# return_datadir_root
+# return_verbosity (for logs)
+# log_config
+
 
 # Custom exception for the package config setup
 class ConfigException(Exception):
@@ -60,9 +73,6 @@ def return_datadir() -> str | Path:  # TODO
         else:
             datadir = config.get("DATADIR", "ROOT")
             return Path(datadir)
-    else:
-        raise ConfigException("System config error: check system installation status.")
-    # TODO add call to logger here to capture exception
 
     # ===================================================================
     # Test type and location (training use)
@@ -171,8 +181,8 @@ def return_demo_temp() -> Path:
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
-    # a_unit            config/test_reader.py TODO
-    # b_integration     test_config_reader.py TODO
+    # a_unit            config/test_reader.py
+    # b_integration     N/A
     # c_end_to_end      N/A
     # d_user_interface  N/A
     # ===================================================================
@@ -292,8 +302,6 @@ def log_config(log_dir_path: Path) -> str | Path:
         settings_message = f"Datadir root parsed: {system_datadir}"
     elif check_install_status() == "Editable":
         settings_message = "Editable install (see local within-repo log directory)"
-    else:
-        raise ConfigException("System config error: check system installation status.")
 
     # Write output to logfile
     config_logger.info(
