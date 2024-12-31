@@ -15,6 +15,7 @@ dependencies:
  - coverage
  - pytest
  - pytest-cov
+ - pytest-mock
  - myst-parser
  - sphinx
  - sphinx_rtd_theme
