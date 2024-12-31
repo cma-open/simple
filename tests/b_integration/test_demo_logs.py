@@ -2,7 +2,12 @@
 
 import re
 
-from simple.demos.demos import demo_config_file_log, demo_logs, demo_system_console_log
+from simple.demos.demos import (
+    demo_config_file_log,
+    demo_logs,
+    demo_logs_cli_entry_point,
+    demo_system_console_log,
+)
 
 # --------------------------------------------------------------------------------------
 # Test for log outputs from demo_temp functions
@@ -173,3 +178,26 @@ def test_demo_logs(tmp_path, caplog, capsys):
     ]
     # check log records are as expected
     assert caplog.record_tuples == expect_log_records
+
+
+# --------------------------
+# demo logs cli entry point
+# --------------------------
+
+
+def test_demo_logs_cli_entry_point(tmp_path):
+    """Test for demo_logs_cli_entry_point function."""
+    # Notes
+    # This function creates parsers then calls demo_logs function
+    # Also writes to main system log to note it has run.
+    # In contrast to the unit test,
+    # this test runs the function and checks logs are created within tmp_path
+    tmp_path_string = str(tmp_path)
+    argv = [tmp_path_string]
+    demo_logs_cli_entry_point(argv)
+    # Set names to logs
+    demo_system_log = tmp_path / "demo_system.log"
+    demo_config_log = tmp_path / "demo_config.log"
+    # Test files have been created
+    assert demo_system_log.is_file()
+    assert demo_config_log.is_file()

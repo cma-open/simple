@@ -13,9 +13,10 @@ Example:
 """
 import argparse
 import logging
+import sys
 from pathlib import Path
 
-from simple.config.reader import return_datadir
+from simple.config.reader import return_demo_temp
 from simple.logger.log import (
     console_formatter,
     create_config_logger,
@@ -25,13 +26,19 @@ from simple.logger.log import (
 system_logger = logging.getLogger(__name__)
 
 # Set demo test constants
-DEMO_TEMP_DIR = return_datadir() / "demo_temp"
+DEMO_TEMP_DIR = return_demo_temp()
 # Set logger names
 DEMO_CONFIG_LOGGER_NAME = "DemoConfigLog"
 DEMO_SYSTEM_LOGGER_NAME = "DemoSystemLog"
 # Set demo log filenames
 DEMO_CONFIG_LOG_FILE = "demo_config.log"
 DEMO_SYSTEM_LOG_FILE = "demo_system.log"
+
+# Dev notes- content
+# demo_config_file_log
+# demo_system_console_log
+# demo_logs
+# demo_logs_cli_entry_point
 
 
 def demo_config_file_log(log_path):
@@ -157,9 +164,16 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
            Default of none is used to trigger accepting supplied arguments from the
            command line when called via an entry point.
     """
+    # Used by command cli-demo-logs (see pyproject.toml)
     # This shows additional functionality of argparse
     # Also shows additional testing potential
     # Illustrates a dry-run option
+
+    # START - go through all dmeo tets ..
+    # Added to facilitate testing with no args
+    # if argv is None:
+    #    argv = []
+
     parser = argparse.ArgumentParser(
         prog="CLI-DEMO-LOGS",
         description="A command line tool to demo logs.",
@@ -172,6 +186,8 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
         "demo_log_dir", help="Directory to write demo logs to", default=None, nargs="?"
     )
     # nargs ? single value, but optional
+    # Therefore command can be run with no arguments supplied.
+
     parser.add_argument(
         "-d",
         "--dry",
@@ -179,24 +195,49 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
         help="Run the command without enacting full functionality",
     )
 
-    # Run the parser and place the extracted data in an argparse.Namespace
-    parsed_args = parser.parse_args(argv)
-    # dry run option just logs a message, no demo logs are created
-    if parsed_args.dry:
-        system_logger.debug(f"{parser.prog} command run in dry-run mode. Exiting")
+    try:
+        # Run the parser and place the extracted data in an argparse.Namespace
+        parsed_args = parser.parse_args(argv)
+        # TODO remove
+        print(f"parsed args: {parsed_args}")
 
-    else:
-        # TODO ideally validate and check path dir input - demo_log_dir
-        # For any set demo_temp paths, ensure Path object
-        if parsed_args.demo_log_dir:
-            # Convert back to a path object
-            demo_log_dir_path = Path(parsed_args.demo_log_dir)
+        # dry run option just logs a message, no demo logs are created
+        if parsed_args.dry:
+            system_logger.debug(f"{parser.prog} command run in dry-run mode. Exiting")
+
         else:
-            demo_log_dir_path = parsed_args.demo_log_dir
-        # Run demo_logs function with args
-        demo_logs(demo_temp_dir=demo_log_dir_path)
-        # Log that the cli tool is running, with args
-        system_logger.debug(f"Running cli-demo-logs tool with: {parsed_args}")
+            # For any set demo_temp paths, ensure Path object
+            if parsed_args.demo_log_dir:
+                # Convert back to a path object
+                demo_log_dir_path = Path(parsed_args.demo_log_dir)
+                parent_directory = demo_log_dir_path.parent
+                if parent_directory.exists() and parent_directory.is_dir():
+                    system_logger.debug(
+                        f"Running cli-demo-logs tool with custom dir: "
+                        f"{demo_log_dir_path}"
+                    )
+                else:
+                    raise FileNotFoundError(
+                        f"Parent directory does not exist: {parent_directory}"
+                    )
+            else:
+                # If no custom path set, then set as None and let demo_logs deal with it
+                demo_log_dir_path = None
+
+            # Run demo_logs function with args
+            # Reminder, if demo logs is passed demo_temp_dir=None then it will use a
+            # demo_temp as set by return_demo_temp() in reader.py
+            demo_logs(demo_temp_dir=demo_log_dir_path)
+            # Log that the cli tool is running, with args
+            system_logger.debug(f"Running cli-demo-logs tool with: {parsed_args}")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        print(
+            "Please ensure the parent directory exists and try again.", file=sys.stderr
+        )
+        print("e.g. a path to the repo, or within home: ~/demos", file=sys.stderr)
+        sys.exit(1)
 
     # Note cli tools may be expected to return none or 0 for testing
     # Note when developing cli tools, check for returncode if used and

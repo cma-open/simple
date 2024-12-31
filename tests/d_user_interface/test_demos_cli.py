@@ -14,6 +14,10 @@ system_logger = logging.getLogger(__name__)
 DEMO_TEMP_DIR = return_datadir() / "demo_temp"
 DEMO_LOG_FILES = ["demo_config.log", "demo_system.log"]
 
+# See pyproject.toml for lis of system scripts
+# cli-demo-logs = "simple.demos.demos:demo_logs_cli_entry_point" (uses argparse)
+# demo-logs = "simple.demos.demos:demo_logs"
+
 # ----------------------------------------------------------------------
 # Tests for simple script function (no use of argparse)
 # ----------------------------------------------------------------------
@@ -119,3 +123,5 @@ def test_cli_demo_logs_with_user_args(tmp_path):
     # Check files are not empty
     assert demo_config_log.stat().st_size != 0
     assert demo_system_log.stat().st_size != 0
+
+    # TODO add more tests with other user defined options

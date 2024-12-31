@@ -7,11 +7,11 @@ Generates main package name and directory for use by other modules.
 from importlib.resources import files
 from pathlib import Path
 
-# Note - no use of logging in this mnodule due to root location and content
+# Note - no use of logging in this module due to root location and content
 
 # Set the package name (works because file is at package root)
 PACKAGE = __package__
-# TODO refactor to give full path or as new RESORCES_DIR
+# TODO refactor to give full path or as new RESOURCES_DIR
 # Set namespace subpackage holding resource files
 RESOURCES = f"{PACKAGE}.resources"
 

@@ -5,7 +5,12 @@ import re
 from pathlib import Path
 from unittest.mock import patch
 
-from simple.demos.demos import demo_config_file_log, demo_logs, demo_system_console_log
+from simple.demos.demos import (
+    demo_config_file_log,
+    demo_logs,
+    demo_logs_cli_entry_point,
+    demo_system_console_log,
+)
 
 # Set test module constants
 # Set expected logger names
@@ -28,6 +33,17 @@ TESTS_CONFIG_FILE_FORMATTER = logging.Formatter(
     fmt="%(asctime)s %(message)s",
     datefmt="%y-%m-%d %H:%M",
 )
+
+# config_side_effect_func
+# test_demo_config_file_log_no_console
+# test_demo_config_file_log_output
+# test_demo_config_file_log_file_content
+# side_effect_func
+# test_demo_system_console_log
+# side_effect_func_console
+# side_effect_func_config
+# test_demo_logs
+# test_demo_logs_cli_entry_point
 
 
 # --------------------------------------------------------------------------------------
@@ -357,3 +373,63 @@ def test_demo_logs(tmp_path, caplog, capsys):
             ]
             # check log records are as expected
             assert caplog.record_tuples == expected_log_records
+
+
+def test_demo_logs_cli_entry_point_dry_run(mocker):
+    """Test for demo_logs_cli_entry_point function."""
+    # Notes
+    # This function creates parsers then calls demo_logs function
+    # Also writes to main system log to note it has run.
+    # Unit test so need to mock out.
+
+    # Mock the logger and demo_logs function
+    mock_logger = mocker.patch("simple.demos.demos.system_logger")
+    mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
+
+    # Test the dry-run option
+    test_args = ["--dry"]
+    demo_logs_cli_entry_point(test_args)
+    # dry run expect only output to main log, demo_logs not run
+    mock_logger.debug.assert_called_with(
+        "CLI-DEMO-LOGS command run in dry-run mode. Exiting"
+    )
+    mock_demo_logs.assert_not_called()
+
+
+def test_demo_logs_cli_entry_point(mocker):
+    """Test for demo_logs_cli_entry_point function."""
+    # Notes
+    # This function creates parsers then calls demo_logs function
+    # Also writes to main system log to note it has run.
+    # Unit test so need to mock out.
+
+    # Mock the logger and demo_logs function
+    mock_logger = mocker.patch("simple.demos.demos.system_logger")
+    mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
+
+    # Test with a demo_log_dir argument
+    test_args = ["test_dir"]
+    demo_logs_cli_entry_point(test_args)
+    # Check function was called as expected
+    mock_demo_logs.assert_called_with(demo_temp_dir=Path("test_dir"))
+    mock_logger.debug.assert_called_with(
+        "Running cli-demo-logs tool with: Namespace(demo_log_dir='test_dir', dry=False)"
+    )
+
+
+def test_demo_logs_cli_entry_point_no_args(mocker):
+    """Test for demo_logs_cli_entry_point function."""
+    # As test above, but check function calls work as expected with no args
+
+    # Mock the logger and demo_logs function
+    mock_logger = mocker.patch("simple.demos.demos.system_logger")
+    mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
+
+    # Test with no demo_log_dir argument
+    test_args = None
+    demo_logs_cli_entry_point(test_args)
+    # Check function was called as expected
+    mock_demo_logs.assert_called_with(demo_temp_dir=None)
+    mock_logger.debug.assert_called_with(
+        "Running cli-demo-logs tool with: Namespace(demo_log_dir=None, dry=False)"
+    )

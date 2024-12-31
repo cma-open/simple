@@ -25,6 +25,14 @@ def show_version() -> None:
     """Show current system package version to terminal and log."""
     system_version = version(PACKAGE)
     logger.info(f"System version: {PACKAGE}-{system_version}")
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit
+    # b_integration     N/A
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def confirm_config() -> None:
@@ -80,6 +88,14 @@ def confirm_config() -> None:
      """
     )
     logger.debug("Confirm-config ran.")
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit
+    # b_integration     N/A
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def show_loggers():
@@ -90,3 +106,11 @@ def show_loggers():
     print("---")
     print(*loggers, sep="\n")
     print("---")
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            /status/test_checks.py
+    # b_integration     N/A
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
