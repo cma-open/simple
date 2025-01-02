@@ -32,31 +32,36 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 # Tested + working - (tools using argparse)
 cli-simple  = "simple.cli:cli_entry_point"
 create-data-options = "simple.cli:cli_data"
-cli-demo-logs = "simple.demos.demos:demo_logs_cli_entry_point"
+cli-demo-logs = "simple.cli:demo_logs_cli_entry_point"
 # ---
-
-# Tested + working - no use of argparse
+demo-logs = "simple.cli:demo_logs_main"  # (no argarse)
+# ---
+# Tested + working - (no use of argparse)
 system-version = "simple.status.checks:show_version"
 show-loggers = "simple.status.checks:show_loggers"
 confirm-config = "simple.status.checks:confirm_config"
 create-data = "simple.netcdf.data:main"
 clean = "simple.io.io:main"
-demo-logs = "simple.demos.demos:demo_logs"
+
+
+# These are main system tools with user input, tested via these tests:
 
 # ===================================================================
 # Test type and location (training use)
 # ===================================================================
-#                           c_end_to_end       d_user_interface
-# cli-simple
-# create-data-options
-# cli-demo-logs                 N/A            test_demo_cli.py
+#                           c_end_to_end      d_user_interface
+# cli-simple                     ?            test_cli_simple.py
+# create-data-options            ?            test_cli_data_creation.py
+# cli-create-data-options  ??
+# cli-demo-logs                 N/A           test_cli_demo.py
 
-# system-version
-# show-loggers
-# confirm-config
-# create-data
-# clean
-# demo-logs                    N/A             test_demos_cli.py
+# system-version                ?             test_commands.py
+# show-loggers                  ?             test_commands.py
+# confirm-config                ?             test_commands.py
+# create-data                   ?             test_commands.py
+# clean                         ?             test_commands.py
+#
+# demo-logs                    N/A            test_demos_cli.py
 # ===================================================================
 
 
