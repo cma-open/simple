@@ -1,5 +1,5 @@
 # simple
-A very simple python package with a command line tool
+A simple python package with command line tools
 
 [![](https://github.com/cma-open/simple/workflows/tests/badge.svg)](https://github.com/cma-open/simple/actions)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/807d755085924a0d8b788c7578eccd92)](https://www.codacy.com/gh/cma-open/simple/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cma-open/simple&amp;utm_campaign=Badge_Grade)
@@ -81,12 +81,57 @@ Development and testing
         - cd scripts/tests
         - ./coverage
 
+Package modules
+
+    - analysis
+        - analysis modules (move prepare here)
+    - common
+        - common code used accross the package (potn move to root)
+    - config
+        - system config reader
+    - crutem (move)
+    - data
+        - data subpackage. examples of working with different data types
+    - demos
+        - code for distinct demos of system functionality
+    - io
+        - code or tools for input/output
+    - logger
+        - config files for system loggers
+    - netcdf (move to data)
+    - prepare (move to analysis)
+    - resources
+        - resource files to be installed alongside the package
+    - setup
+        - Setup of system directories and log files
+    - status (combine with common)
+    - workflow
+        - Example full system workflow for end to end testing
+    - cli.py
+        - (move into cli subpackage?)
+        - main command line tools (w. argparse)
+    - definitions.py
+        - Key package and code constants e.g. ROOT_DIR, RESORCES_DIR
+    - tests
+        - all system tests wtihin subdirectories
+        - a_unit
+        - b_integration
+        - c_end_to_end
+        - d_user_interfac
+        - e_performance
+
 System design, content, and architecture
 
     - docstrings are added to tests, against convention, to aid display via sphinx
     - tests are not always realistic, the system is over-tested as a training example
-    - system features are chosne to illustrate training examples, so not always realistic
+    - system features are chosen to illustrate training examples (not always realistic)
     - features may be duplicated to allow different solutions to be compared
+
+Testing and system design
+
+    - aim for functions to be modular and desinged to be fully testable
+    - clear tests for unit, integration, end-to-end, user interface, performance
+    - wrapper functions, e.g. within cli.py allow tests for callable scripts
 
 Codestyle code quality and code review
 
@@ -118,15 +163,24 @@ Logging strategy
 
     - The main system Log (system.log) uses both a console logger and file handler.
       Information is output to both terminal console and to file.
+
       INFO level and above go to the console.
       DEBUG and above go to file.
+
       Therefore more detailed logging is available by checking the system.log file.
 
       A verbose setting is used to deselect some log output if set to False. This can
       make logs smaller and easier to read. If needed for additional debugging this can
       be set to True and will cause further debug messages to be logged.
-      The verbose settign only applies to developer editable installs not full user use.
+      The verbose settign only applies to developer editable installs not full use.
+
       (Reminder DEBUG>INFO>WARNING>ERROR>CRITICAL)
+
+      An additional logging strategy is applied to command line tools, relating to
+      test runs.
+
+      TODO - notes here
+
 
 Wiki
 
