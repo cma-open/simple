@@ -1,6 +1,4 @@
-"""Command line tool - a simple analysis tool example.
-
-Takes user supplied parameters and conducts analysis, prints output to terminal.
+"""Command line tools.
 
 Example
 -------
@@ -12,10 +10,13 @@ literal blocks::
 
 import argparse
 import logging
+import sys
 from importlib.metadata import version
+from pathlib import Path
 
 from simple.analysis.analysis import calculate
 from simple.definitions import PACKAGE
+from simple.demos.demos import demo_logs
 from simple.netcdf.data import main
 
 # Take the version number from the package version
@@ -26,6 +27,16 @@ pkg_version = version(PACKAGE)
 
 # Set module logger
 logger = logging.getLogger(__name__)
+
+# Purpose
+# These commands mainly use argparse to manage user input, options and feedback
+# Other simple commands that do not use argparse are located in their parent modules.
+
+# Contents
+# cli_entry_point (command = cli-simple)
+# cli_data   (command = create-data-options)
+# demo_logs_cli_entry_point (command = cli-demo-logs
+# demo_logs_main (command = demo-logs)  (no argparse)
 
 
 def cli_entry_point(argv: list[str] | None = None) -> None:
@@ -133,6 +144,120 @@ def cli_data(argv: list[str] | None = None) -> None:
     # Note cli tools may be expected to return none or 0 for testing
     # When developing tests for cli tools, check the use of returncode
 
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            test_cli.py
+    # b_integration     test_cli.py
+    # c_end_to_end      test_cli.py
+    # d_user_interface  test_cli.py
+    # ===================================================================
+
+
+def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
+    """Argparse wrapped function to call demo logs.
+
+    Parameters
+    ----------
+    argv : list[str] | None
+           List of arguments supplied via the command line
+           Default of none is used to trigger accepting supplied arguments from the
+           command line when called via an entry point.
+    """
+    # Used by command cli-demo-logs (see pyproject.toml)
+    # This shows additional functionality of argparse
+    # Also shows additional testing potential
+    # Illustrates a dry-run option
+
+    parser = argparse.ArgumentParser(
+        prog="CLI-DEMO-LOGS",
+        description="A command line tool to demo logs.\n"
+        "If no directory is supplied then files will be written into a \n"
+        "directory 'demo_temp' within DATADIR.",
+        epilog="  ---  ",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    # Arguments in argparse can be positional or optional
+    # Set the argument type and limit choices from a list
+    parser.add_argument(
+        "demo_log_dir", help="Directory to write demo logs to", default=None, nargs="?"
+    )
+    # nargs ? single value, but optional
+    # Therefore command can be run with no arguments supplied.
+
+    parser.add_argument(
+        "-d",
+        "--dry",
+        action="store_true",
+        help="Run the command without enacting full functionality",
+    )
+
+    try:
+        # Run the parser and place the extracted data in an argparse.Namespace
+        parsed_args = parser.parse_args(argv)
+        # TODO remove
+        print(f"parsed args: {parsed_args}")
+
+        # dry run option just logs a message, no demo logs are created
+        if parsed_args.dry:
+            logger.debug(f"{parser.prog} command run in dry-run mode. Exiting")
+
+        else:
+            # For any set demo_temp paths, ensure Path object
+            if parsed_args.demo_log_dir:
+                # Convert back to a path object
+                demo_log_dir_path = Path(parsed_args.demo_log_dir)
+                parent_directory = demo_log_dir_path.parent
+                if parent_directory.exists() and parent_directory.is_dir():
+                    logger.debug(
+                        f"Running cli-demo-logs tool with custom dir: "
+                        f"{demo_log_dir_path}"
+                    )
+                else:
+                    raise FileNotFoundError(
+                        f"Parent directory does not exist: {parent_directory}"
+                    )
+            else:
+                # If no custom path set, then set as None and let demo_logs deal with it
+                demo_log_dir_path = None
+
+            # Run demo_logs function with args
+            # Reminder, if demo logs is passed demo_temp_dir=None then it will use a
+            # demo_temp as set by return_demo_temp() in reader.py
+            demo_logs(demo_temp_dir=demo_log_dir_path)
+            # Log that the cli tool is running, with args
+            logger.debug(f"Running cli-demo-logs tool with: {parsed_args}")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        print(
+            "Please ensure the parent directory exists and try again.", file=sys.stderr
+        )
+        print("e.g. a path to the repo, or within home: ~/demos", file=sys.stderr)
+        sys.exit(1)
+
+    # Note cli tools may be expected to return none or 0 for testing
+    # Note when developing cli tools, check for returncode if used and
+    # compare use when called via function (no code) vs CLI tool (rtn code).
+
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            /demos/test_demo_logs.py
+    # b_integration     test_demo_logs.py
+    # c_end_to_end      N/A
+    # d_user_interface  N/A (see pyproject.toml)
+    # ===================================================================
+
+
+# Note - no argparse here - uses sys.argv instead
+def demo_logs_main():
+    """Command to call the demo logs function, with option to set target directory.
+
+    Creates two example demo log files within a directory.
+    """
+    demo_temp_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else None
+    demo_logs(demo_temp_dir=demo_temp_dir)
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
