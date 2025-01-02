@@ -1,4 +1,4 @@
-"""User interface tests the cli tool."""
+"""User interface tests for the cli tool."""
 
 # This module uses subprocess, which can raise security threats.
 # The risk have been reviewed via Codacy, Bandit.
@@ -27,6 +27,11 @@ TOOL = "cli-simple"
 # CLI tool is registered via project.scripts in pyproject.toml
 # Can't be called and run via filepath (does not use main)
 # Can't be called and run via module name (does not use main)
+
+# Tests for:
+# cli-simple
+
+# See other modules for other command line tests
 
 
 def test_cli_help_version():
