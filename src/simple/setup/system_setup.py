@@ -1,6 +1,7 @@
 """Setup system directories and loggers."""
 
 import logging
+from importlib.metadata import version
 from pathlib import Path
 
 from simple.common.common import check_install_status
@@ -132,6 +133,7 @@ def log_config(log_dir_path: Path) -> str | Path:
     --  config --
     System installed as: {check_install_status(display=True)}
     Package dir: {PACKAGE_DIR}
+    System version: {PACKAGE}-{version(PACKAGE)}
     Config file datadir root, user setting is: {user_datadir}
     Settings: {settings_message}
         Config file datadir root (parsed) is: {return_datadir()}
