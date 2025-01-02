@@ -5,12 +5,8 @@ import re
 from pathlib import Path
 from unittest.mock import patch
 
-from simple.demos.demos import (
-    demo_config_file_log,
-    demo_logs,
-    demo_logs_cli_entry_point,
-    demo_system_console_log,
-)
+from simple.cli import demo_logs_cli_entry_point
+from simple.demos.demos import demo_config_file_log, demo_logs, demo_system_console_log
 
 # Set test module constants
 # Set expected logger names
@@ -44,6 +40,9 @@ TESTS_CONFIG_FILE_FORMATTER = logging.Formatter(
 # side_effect_func_config
 # test_demo_logs
 # test_demo_logs_cli_entry_point
+
+# NOTE re tests and logging
+# add comments to be clear on source of logging calls in subcomponent functions
 
 
 # --------------------------------------------------------------------------------------
@@ -383,7 +382,7 @@ def test_demo_logs_cli_entry_point_dry_run(mocker):
     # Unit test so need to mock out.
 
     # Mock the logger and demo_logs function
-    mock_logger = mocker.patch("simple.demos.demos.system_logger")
+    mock_logger = mocker.patch("simple.cli.logger")
     mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
 
     # Test the dry-run option
@@ -404,7 +403,7 @@ def test_demo_logs_cli_entry_point(mocker):
     # Unit test so need to mock out.
 
     # Mock the logger and demo_logs function
-    mock_logger = mocker.patch("simple.demos.demos.system_logger")
+    mock_logger = mocker.patch("simple.cli.logger")
     mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
 
     # Test with a demo_log_dir argument
@@ -426,7 +425,7 @@ def test_demo_logs_cli_entry_point_no_args(mocker):
     mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
 
     # Test with no demo_log_dir argument
-    test_args = None
+    test_args = [None]  # None within list to mimic empty command line call
     demo_logs_cli_entry_point(test_args)
     # Check function was called as expected
     mock_demo_logs.assert_called_with(demo_temp_dir=None)
