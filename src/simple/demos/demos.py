@@ -12,7 +12,6 @@ Example:
 
 """
 import logging
-import os
 from pathlib import Path
 
 from simple.config.reader import return_demo_temp
@@ -141,10 +140,10 @@ def demo_logs(demo_temp_dir=None):
     demo_config_file_log(log_path=demo_config_log)
     # Add an extra log message at system level
     # NOTE - reminder this is to main system logger, not demo logger
-    if os.getenv("PYTEST_CURRENT_TEST"):
-        logging.disable(logging.CRITICAL)
-    else:
-        system_logger.info(f"Demo logs has run - see files in {demo_temp_dir}")
+    # if os.getenv("PYTEST_CURRENT_TEST"):
+    #    logging.disable(logging.CRITICAL)
+    # else:
+    system_logger.info(f"Demo logs has run - see files in {demo_temp_dir}")
 
     # ===================================================================
     # Test type and location (training use)
