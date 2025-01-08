@@ -2,12 +2,10 @@
 
 import re
 
-from simple.demos.demos import (
-    demo_config_file_log,
-    demo_logs,
-    demo_logs_cli_entry_point,
-    demo_system_console_log,
-)
+from simple.cli import demo_logs_cli_entry_point
+
+# demo_logs_main
+from simple.demos.demos import demo_config_file_log, demo_logs, demo_system_console_log
 
 # --------------------------------------------------------------------------------------
 # Test for log outputs from demo_temp functions
