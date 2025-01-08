@@ -3,12 +3,14 @@
 import logging
 import os
 import subprocess
+from contextlib import contextmanager
 from importlib import import_module
 from importlib.metadata import entry_points
 from unittest import mock
 
 from simple.config.reader import return_datadir
 
+# TODO check test logger
 system_logger = logging.getLogger(__name__)
 
 # Set demo test constants
@@ -18,9 +20,30 @@ DEMO_LOG_FILES = ["demo_config.log", "demo_system.log"]
 # Set the environment variable to indicate test mode
 os.environ["TEST_MODE"] = "1"
 
-# See pyproject.toml for lis of system scripts
+# See pyproject.toml for full list of system scripts
 # cli-demo-logs = "simple.demos.demos:demo_logs_cli_entry_point" (uses argparse)
 # demo-logs = "simple.demos.demos:demo_logs"
+
+# These tests check these script as if they were run at the command line by a user
+# Check script call, user options and expected outputs (inc. log to file or console)
+# ----------------------------------------------------------------------
+# test_demo_logs_call x
+#    "demo-logs" call with no user args
+# test_demo_logs_call
+#    "demo-logs" call with custom dir as tmp_path
+# test_demo_logs_call_mock xxx
+#    l
+# test_entry_points_demo_logs
+#    check "demo-logs" command script registered correctly
+# ----------------------------------------------------------------------
+# test_cli_demo_logs_dry_run
+# test "cli-demo-logs" with dry run option
+# test_cli_demo_logs_with_user_args
+# test "cli-demo-logs" with custom dir as tmp_path
+# test_entry_points_cli_demo_logs
+#    test "cli-demo-logs" command script registered correctly
+# ----------------------------------------------------------------------
+
 
 # ----------------------------------------------------------------------
 # Tests for simple script function (no use of argparse)
@@ -128,6 +151,78 @@ def test_demo_logs_call(tmp_path):
 #                 print(file)
 
 
+@contextmanager
+def disable_logging():
+    """Disable logging by level."""
+    logging.disable(logging.CRITICAL)
+    try:
+        yield
+    finally:
+        logging.disable(logging.NOTSET)
+
+
+@contextmanager
+def disable_logger_hierarchy(parent_logger_name):
+    """Disable selected loggers by name."""
+    parent_logger = logging.getLogger(parent_logger_name)
+    original_level = parent_logger.level
+    parent_logger.setLevel(logging.CRITICAL)
+    try:
+        yield
+    finally:
+        parent_logger.setLevel(original_level)
+
+
+def test_demo_logs_call_mock_x(tmp_path):
+    """Test the demo-logs command."""
+    CLI_CALL = "demo-logs"
+    # with disable_logging():
+    with disable_logger_hierarchy("simple"):
+        loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+        print(loggers)
+
+        out = subprocess.run(
+            [CLI_CALL, str(tmp_path)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )  # nosec
+        # Confirm success when run with help option
+        assert out.returncode == 0
+
+        # Check log files have been saved to expected locations
+        # Set full path location for demo_temp log files x2
+        demo_system_log = tmp_path / DEMO_LOG_FILES[1]
+        demo_config_log = tmp_path / DEMO_LOG_FILES[0]
+        # Check logs now exist
+        assert demo_config_log.is_file()
+        assert demo_system_log.is_file()
+        # Check files are not empty
+        assert demo_config_log.stat().st_size != 0
+        assert demo_system_log.stat().st_size != 0
+        # Verify logger message
+        # log_messages = [record.message for record in caplog.records]
+        # assert any("Demo logs has run - see files in"
+        # in message for message in log_messages)
+
+        # Print out all captured log messages for debugging purposes
+        # print("Captured log messages:")
+        # print(caplog)
+        # print(caplog.records)
+        # for record in caplog.records:
+        #     print(record.message)
+        #
+        # # Print captured stderr for debugging purposes
+        # print("Captured stderr:")
+        # print(out.stderr)
+
+        # assert "Demo logs has run - see files in" in out.stderr
+
+        # Print out the files in tmp_path for debugging purposes
+        print("Files in tmp_path:")
+        for file in tmp_path.iterdir():
+            print(file)
+
+
 def test_demo_logs_call_mock(tmp_path, mocker, caplog):
     """Test the demo-logs command, capture logs."""
     # Note - the script name is set via project.scripts in pyproject.toml
@@ -198,7 +293,7 @@ def test_entry_point_demo_logs():
     scripts = entry_points(group="console_scripts")
     # Set name of script being tested
     cli_script = "demo-logs"
-    # Check the named script exists
+    # Check the named script exists in the list of system scripts
     assert cli_script in scripts.names
     # Cast to tuple, as selection for script under test
     (script,) = entry_points(group="console_scripts", name=cli_script)
@@ -208,7 +303,7 @@ def test_entry_point_demo_logs():
     # e.g. this checks demo_logs is callable from the demos module
     assert hasattr(test_module, script.attr)
     # Further check of full path (kept just to illustrate access)
-    assert script.value == "simple.demos.demos:demo_logs"
+    assert script.value == "simple.cli:demo_logs_main"
 
 
 # ----------------------------------------------------------------------
@@ -263,4 +358,21 @@ def test_cli_demo_logs_with_user_args(tmp_path):
     assert demo_config_log.stat().st_size != 0
     assert demo_system_log.stat().st_size != 0
 
-    # TODO add more tests with other user defined options
+
+def test_entry_point_cli_demo_logs():
+    """Tests to check the command line scripts have been set correctly."""
+    # Get current list of installed console scripts
+    scripts = entry_points(group="console_scripts")
+    # Set name of script being tested
+    cli_script = "cli-demo-logs"
+    # Check the named script exists in the list of system scripts
+    assert cli_script in scripts.names
+    # Cast to tuple, as selection for script under test
+    (script,) = entry_points(group="console_scripts", name=cli_script)
+    # Get imported parent module by name
+    test_module = import_module(script.module)
+    # Check the function exists within the parent module
+    # e.g. this checks demo_logs is callable from the demos module
+    assert hasattr(test_module, script.attr)
+    # Further check of full path (kept just to illustrate access)
+    assert script.value == "simple.cli:demo_logs_cli_entry_point"
