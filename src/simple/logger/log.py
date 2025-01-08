@@ -30,6 +30,11 @@ SYSTEM_LOG_FILE = "system.log"
 # TODO - take from config file
 # see https://docs.python.org/3/howto/logging.html#logging-to-a-file
 
+# CONTENTS (temp dev notes)
+# add_system_console_handler
+#    adds a console stream logger to existing logger
+#    sets level at INFO and above (so no DEBUG messages)
+
 
 # Create log formatter
 file_formatter = logging.Formatter(
