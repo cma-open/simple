@@ -2,7 +2,9 @@
 
 name: simple-env
 channels:
- - conda-forge
+  # make sure conda-main is not listed here (MO L)
+  - conda-forge
+  - nodefaults
 dependencies:
  - python>=3.11
  - iris>=3.0
