@@ -1,38 +1,23 @@
 """UI Tests for the system demos."""
 
-import logging
-import os
 import subprocess
-from contextlib import contextmanager
 from importlib import import_module
 from importlib.metadata import entry_points
-from unittest import mock
-
-from simple.config.reader import return_datadir
-
-# TODO check test logger
-system_logger = logging.getLogger(__name__)
 
 # Set demo test constants
-DEMO_TEMP_DIR = return_datadir() / "demo_temp"
 DEMO_LOG_FILES = ["demo_config.log", "demo_system.log"]
-
-# Set the environment variable to indicate test mode
-os.environ["TEST_MODE"] = "1"
 
 # See pyproject.toml for full list of system scripts
 # cli-demo-logs = "simple.demos.demos:demo_logs_cli_entry_point" (uses argparse)
-# demo-logs = "simple.demos.demos:demo_logs"
+# demo-logs = "simple.cli:demo_logs_main"
 
 # These tests check these script as if they were run at the command line by a user
 # Check script call, user options and expected outputs (inc. log to file or console)
 # ----------------------------------------------------------------------
-# test_demo_logs_call x
-#    "demo-logs" call with no user args
-# test_demo_logs_call
+# test_demo_logs_call_user_arg
 #    "demo-logs" call with custom dir as tmp_path
-# test_demo_logs_call_mock xxx
-#    l
+# "demo_logs" is not tested without user args as that would write to disk
+# also such tests are covered by module tests for the function
 # test_entry_points_demo_logs
 #    check "demo-logs" command script registered correctly
 # ----------------------------------------------------------------------
@@ -44,247 +29,44 @@ os.environ["TEST_MODE"] = "1"
 #    test "cli-demo-logs" command script registered correctly
 # ----------------------------------------------------------------------
 
-
 # ----------------------------------------------------------------------
-# Tests for simple script function (no use of argparse)
+# Tests for simple "demo-logs" script function (no use of argparse)
+# demo-logs command calls demo_logs_main at simple.cli.demo_logs_main
+# main component function simple.demos.demos.demo_logs
+# logs occur at - demos.demos.system_logger but disabled if run by pytest
 # ----------------------------------------------------------------------
 
 
-# @pytest.fixture(autouse=True)
-# def disable_logging():
-#    logging.disable(logging.CRITICAL)
-#    yield
-#    logging.disable(logging.NOTSET)
-
-
-def test_demo_logs_call(tmp_path):
-    """Test the demo-logs command."""
+def test_demo_logs_call_user_arg(tmp_path):
+    """Test the demo-logs command - with user path argument."""
     # Note - the script name is set via project.scripts in pyproject.toml
     # Note - this is a basic command call to the function, no argparse
     # Note capsys and caplog don't work well with subprocesses
-    # mock_logger = mocker.patch("simple.demos.demos.system_logger")
-
     CLI_CALL = "demo-logs"
+    user_path_arg = str(tmp_path)
     # Run the command line call - pass tmp_path as target directory
     out = subprocess.run(
-        [CLI_CALL, str(tmp_path)],
+        [CLI_CALL, user_path_arg],
         check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
         text=True,
     )  # nosec
-    # out = subprocess.run([CLI_CALL, str(tmp_path)], check=True, text=True)  # nosec
     # Reminder - If check is true, and the process exits with a non-zero exit code,
     # a CalledProcessError exception will be raised. Attributes of exception hold
     # the arguments, the exit code, and stdout and stderr if they were captured
     # Confirm success when run with help option
     assert out.returncode == 0
-
-    # mock_logger.debug.assert_called_with(
-    #    "Running cli-demo-logs tool with:
-    #    Namespace(demo_log_dir='test_dir', dry=False)"
-    # )
-    # Check log files have been saved to expected locations
-    # Issues here are
-    #   - overwriting already in-use locations
-    #   - not possible to mock command calls via subprocess?
-    # Set full path location for demo_temp log files x2
-    demo_system_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[1]
-    demo_config_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[0]
-    # Check logs now exist
+    # Check log files have been saved to test tmp_path
+    # Set full path locations x2
+    demo_system_log = tmp_path / DEMO_LOG_FILES[1]
+    demo_config_log = tmp_path / DEMO_LOG_FILES[0]
+    # Check the specific demo logs now exist
     assert demo_config_log.is_file()
     assert demo_system_log.is_file()
     # Check files are not empty
     assert demo_config_log.stat().st_size != 0
     assert demo_system_log.stat().st_size != 0
-    # Check the expected main system log messages occurred
-    # assert "Demo logs has run - see files in " in out.stderr
-    # print(out.stderr)
-    print("Files in tmp_path:")
-    for file in tmp_path.iterdir():
-        print(file)
+    # No logs to stdout, output to system.log file (disabled in tests)
     # See other tests under a_unit/demos/
-
-
-# def test_demo_logs_call_2(tmp_path):
-#     """Test the demo-logs command."""
-#     # Note - the script name is set via project.scripts in pyproject.toml
-#     # Note - this is a basic command call to the function, no argparse
-#     # Note capsys and caplog dont work with subprocesses
-#     # WARNING -currently this test modifies actual content on disk
-#     CLI_CALL = "demo-logs"
-#     with patch("simple.demos.demos.DEMO_TEMP_DIR", tmp_path):
-#         # Mock the demo_logs function
-#         with patch("simple.demos.demos.demo_logs") as mock_demo_logs:
-#             # Run the command line call
-#             out = subprocess.run(
-#                 [CLI_CALL],
-#                 check=True,
-#                 stdout=subprocess.PIPE,
-#             )
-#             # Reminder - If check is true, and the process exits with a non-zero code,
-#             #                        stderr=subprocess.PIPE, text=True
-#             # a CalledProcessError exception is be raised.
-#             # Attributes of exception hold
-#             # the args, exit code, and stdout and stderr if they were captured
-#             # Confirm success when run with help option
-#             assert out.returncode == 0
-#             # Check log files have been saved to expected locations
-#             # Issues here are
-#             #   - overwriting already in-use locations
-#             #   - not possible to mock command calls via subprocess?
-#             # Set full path location for demo_temp log files x2
-#             demo_system_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[1]
-#             demo_config_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[0]
-#             # Check logs now exist
-#             assert demo_config_log.is_file()
-#             assert demo_system_log.is_file()
-#             # Check files are not empty
-#             assert demo_config_log.stat().st_size != 0
-#             assert demo_system_log.stat().st_size != 0
-#             # Check the expected main system log messages occurred
-#             assert "Demo logs has run - see files in " in out.stderr
-#             # assert mock_demo_logs.assert_called_once_with(#logs)
-#             # Print out the files in tmp_path for debugging purposes
-#             print("Files in tmp_path:")
-#             for file in tmp_path.iterdir():
-#                 print(file)
-
-
-@contextmanager
-def disable_logging():
-    """Disable logging by level."""
-    logging.disable(logging.CRITICAL)
-    try:
-        yield
-    finally:
-        logging.disable(logging.NOTSET)
-
-
-@contextmanager
-def disable_logger_hierarchy(parent_logger_name):
-    """Disable selected loggers by name."""
-    parent_logger = logging.getLogger(parent_logger_name)
-    original_level = parent_logger.level
-    parent_logger.setLevel(logging.CRITICAL)
-    try:
-        yield
-    finally:
-        parent_logger.setLevel(original_level)
-
-
-def test_demo_logs_call_mock_x(tmp_path):
-    """Test the demo-logs command."""
-    CLI_CALL = "demo-logs"
-    # with disable_logging():
-    with disable_logger_hierarchy("simple"):
-        loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
-        print(loggers)
-
-        out = subprocess.run(
-            [CLI_CALL, str(tmp_path)],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )  # nosec
-        # Confirm success when run with help option
-        assert out.returncode == 0
-
-        # Check log files have been saved to expected locations
-        # Set full path location for demo_temp log files x2
-        demo_system_log = tmp_path / DEMO_LOG_FILES[1]
-        demo_config_log = tmp_path / DEMO_LOG_FILES[0]
-        # Check logs now exist
-        assert demo_config_log.is_file()
-        assert demo_system_log.is_file()
-        # Check files are not empty
-        assert demo_config_log.stat().st_size != 0
-        assert demo_system_log.stat().st_size != 0
-        # Verify logger message
-        # log_messages = [record.message for record in caplog.records]
-        # assert any("Demo logs has run - see files in"
-        # in message for message in log_messages)
-
-        # Print out all captured log messages for debugging purposes
-        # print("Captured log messages:")
-        # print(caplog)
-        # print(caplog.records)
-        # for record in caplog.records:
-        #     print(record.message)
-        #
-        # # Print captured stderr for debugging purposes
-        # print("Captured stderr:")
-        # print(out.stderr)
-
-        # assert "Demo logs has run - see files in" in out.stderr
-
-        # Print out the files in tmp_path for debugging purposes
-        print("Files in tmp_path:")
-        for file in tmp_path.iterdir():
-            print(file)
-
-
-def test_demo_logs_call_mock(tmp_path, mocker, caplog):
-    """Test the demo-logs command, capture logs."""
-    # Note - the script name is set via project.scripts in pyproject.toml
-    # Note - this is a basic command call to the function, no argparse
-    # Mock DEMO_TEMP_DIR to be tmp_path
-    mocker.patch("simple.demos.demos.DEMO_TEMP_DIR", tmp_path)
-    # Mock the subprocess.run call
-    # mocker.patch('subprocess.run', return_value=mock.Mock(returncode=0))
-    mocker.patch("subprocess.run", side_effect=[mock.Mock(returncode=0)])
-    # Ensure the logger is configured to capture INFO level messages
-    logger = logging.getLogger("simple.demos.demos")
-    logger.setLevel(logging.INFO)
-    if not logger.hasHandlers():
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.INFO)
-        logger.addHandler(handler)
-
-    CLI_CALL = "demo-logs"
-    with caplog.at_level(logging.INFO):
-        # Run the command line call
-        out = subprocess.run(
-            [CLI_CALL], check=True, capture_output=True, text=True
-        )  # nosec
-        # Confirm success when run with help option
-        assert out.returncode == 0
-
-        # Check log files have been saved to expected locations
-        # Issues here are
-        #   - overwriting already in-use locations
-        #   - not possible to mock command calls via subprocess?
-        # Set full path location for demo_temp log files x2
-        demo_system_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[1]
-        demo_config_log = DEMO_TEMP_DIR / DEMO_LOG_FILES[0]
-        # Check logs now exist
-        assert demo_config_log.is_file()
-        assert demo_system_log.is_file()
-        # Check files are not empty
-        assert demo_config_log.stat().st_size != 0
-        assert demo_system_log.stat().st_size != 0
-        # Verify logger message
-        # log_messages = [record.message for record in caplog.records]
-        # assert any("Demo logs has run - see files in"
-        # in message for message in log_messages)
-        print(caplog.text)
-
-        # Print out all captured log messages for debugging purposes
-        print("Captured log messages:")
-        print(caplog)
-        print(caplog.records)
-        for record in caplog.records:
-            print(record.message)
-
-        # Print captured stderr for debugging purposes
-        print("Captured stderr:")
-        print(out.stderr)
-
-        assert "Demo logs has run - see files in" in out.stderr
-
-        # Print out the files in tmp_path for debugging purposes
-        print("Files in tmp_path:")
-        for file in tmp_path.iterdir():
-            print(file)
 
 
 def test_entry_point_demo_logs():
@@ -295,12 +77,12 @@ def test_entry_point_demo_logs():
     cli_script = "demo-logs"
     # Check the named script exists in the list of system scripts
     assert cli_script in scripts.names
-    # Cast to tuple, as selection for script under test
+    # Cast to tuple, as selection for current script under test
     (script,) = entry_points(group="console_scripts", name=cli_script)
     # Get imported parent module by name
     test_module = import_module(script.module)
     # Check the function exists within the parent module
-    # e.g. this checks demo_logs is callable from the demos module
+    # This checks demo_logs is callable from the demos module
     assert hasattr(test_module, script.attr)
     # Further check of full path (kept just to illustrate access)
     assert script.value == "simple.cli:demo_logs_main"

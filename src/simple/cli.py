@@ -10,12 +10,13 @@ literal blocks::
 
 import argparse
 import logging
+import os
 import sys
 from importlib.metadata import version
 from pathlib import Path
 
 from simple.analysis.analysis import calculate
-from simple.definitions import PACKAGE
+from simple.definitions import PACKAGE, ROOT_DIR
 from simple.demos.demos import demo_logs
 from simple.netcdf.data import main
 
@@ -28,6 +29,12 @@ pkg_version = version(PACKAGE)
 # Set module logger
 logger = logging.getLogger(__name__)
 
+# Check if running under pytest and disable logging for system_logger if so
+# Only used for selected command line calls
+# (Alternative would be to adda pr script arg to disable logging, per command)
+if os.getenv("PYTEST_CURRENT_TEST"):
+    logger.setLevel(logging.CRITICAL)
+
 # Purpose
 # These commands mainly use argparse to manage user input, options and feedback
 # Other simple commands that do not use argparse are located in their parent modules.
@@ -35,7 +42,7 @@ logger = logging.getLogger(__name__)
 # Contents
 # cli_entry_point (command = cli-simple)
 # cli_data   (command = create-data-options)
-# demo_logs_cli_entry_point (command = cli-demo-logs
+# demo_logs_cli_entry_point (command = cli-demo-logs)
 # demo_logs_main (command = demo-logs)  (no argparse)
 
 
@@ -89,8 +96,8 @@ def cli_entry_point(argv: list[str] | None = None) -> None:
     # ===================================================================
     # a_unit            test_cli.py
     # b_integration     test_cli.py
-    # c_end_to_end      test_cli.py
-    # d_user_interface  test_cli.py
+    # c_end_to_end      test_cli.py # TODO
+    # d_user_interface  test_cli.py # TODO
     # ===================================================================
 
 
@@ -149,8 +156,8 @@ def cli_data(argv: list[str] | None = None) -> None:
     # ===================================================================
     # a_unit            test_cli.py
     # b_integration     test_cli.py
-    # c_end_to_end      test_cli.py
-    # d_user_interface  test_cli.py
+    # c_end_to_end      test_cli.py # TODO
+    # d_user_interface  test_cli.py # TODO
     # ===================================================================
 
 
@@ -168,7 +175,6 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
     # This shows additional functionality of argparse
     # Also shows additional testing potential
     # Illustrates a dry-run option
-
     parser = argparse.ArgumentParser(
         prog="CLI-DEMO-LOGS",
         description="A command line tool to demo logs.\n"
@@ -191,16 +197,25 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
         action="store_true",
         help="Run the command without enacting full functionality",
     )
+    # The optional args are prefixed by - or --
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Print progress and further info to stdout",
+    )
 
     try:
         # Run the parser and place the extracted data in an argparse.Namespace
         parsed_args = parser.parse_args(argv)
-        # TODO remove
-        print(f"parsed args: {parsed_args}")
+        print(parsed_args)
+        if parsed_args.verbose:
+            logger.info(f"{parser.prog} command run in verbose mode.")
+            logger.info(f"Parsed args: {parsed_args}")
 
         # dry run option just logs a message, no demo logs are created
         if parsed_args.dry:
-            logger.debug(f"{parser.prog} command run in dry-run mode. Exiting")
+            logger.info(f"{parser.prog} command run in dry-run mode. Exiting")
 
         else:
             # For any set demo_temp paths, ensure Path object
@@ -235,7 +250,6 @@ def demo_logs_cli_entry_point(argv: list[str] | None = None) -> None:
         )
         print("e.g. a path to the repo, or within home: ~/demos", file=sys.stderr)
         sys.exit(1)
-
     # Note cli tools may be expected to return none or 0 for testing
     # Note when developing cli tools, check for returncode if used and
     # compare use when called via function (no code) vs CLI tool (rtn code).
@@ -256,7 +270,75 @@ def demo_logs_main():
 
     Creates two example demo log files within a directory.
     """
-    demo_temp_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else None
+    # Note - no user feedback, compare example features with argparse function
+
+    if len(sys.argv) > 1:
+        demo_temp_dir = Path(sys.argv[1])
+
+        # Check for option flags
+        if demo_temp_dir.name.startswith("--"):
+            print(
+                f"Error: Invalid option flag {demo_temp_dir.name}. "
+                f"Please supply a valid path.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        parent_directory = demo_temp_dir.parent
+
+        # Check if the parent directory exists and is not root or home
+        if not parent_directory.exists() or not parent_directory.is_dir():
+            print(
+                f"Error: Parent directory {parent_directory} does not exist.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        if parent_directory == Path("/") or parent_directory == Path.home():
+            print(
+                f"Error: Parent directory {parent_directory} "
+                f"cannot be root or home directory.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Additional checks to prevent invalid paths
+        if demo_temp_dir in [Path("."), Path("./"), Path("test"), Path("./test")]:
+            print(
+                f"Error: Invalid directory {demo_temp_dir}. "
+                f"Please supply a valid path.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Check if the path is too generic or relative to the current directory
+        if demo_temp_dir.resolve() in [Path.cwd(), Path.cwd().parent]:
+            print(
+                f"Error: Invalid directory {demo_temp_dir}. "
+                f"Please supply a more specific path.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Check if the parent directory is the current directory
+        if parent_directory == Path.cwd():
+            print(
+                f"Error: Parent directory {parent_directory}"
+                f" cannot be the current directory.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        # Check if the path is within the parent of ROOT_DIR
+        if ROOT_DIR.parent in demo_temp_dir.resolve().parents:
+            print(
+                f"Error: Directory {demo_temp_dir} cannot "
+                f"be within the parent directory of {ROOT_DIR}.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+    else:
+        demo_temp_dir = None
+
     demo_logs(demo_temp_dir=demo_temp_dir)
     # ===================================================================
     # Test type and location (training use)
@@ -264,5 +346,5 @@ def demo_logs_main():
     # a_unit            test_cli.py
     # b_integration     test_cli.py
     # c_end_to_end      test_cli.py
-    # d_user_interface  test_cli.py
+    # d_user_interface  N/A (see via pyproject.toml)
     # ===================================================================

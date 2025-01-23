@@ -61,7 +61,7 @@ clean = "simple.io.io:main"
 # create-data                   ?             test_commands.py
 # clean                         ?             test_commands.py
 #
-# demo-logs                    N/A            test_demos_cli.py
+# demo-logs                    N/A            test_cli_demo.py
 # ===================================================================
 
 

@@ -68,7 +68,7 @@ User instructions
                 - Creates both config and system demo logs in a temp directory
 
 
-Development and testing
+Development tests
 
     - Install via the script and follow the prompts
         - cd scripts/install
@@ -129,9 +129,26 @@ System design, content, and architecture
 
 Testing and system design
 
-    - aim for functions to be modular and desinged to be fully testable
+    - aim for functions to be modular and designed to be fully testable
     - clear tests for unit, integration, end-to-end, user interface, performance
-    - wrapper functions, e.g. within cli.py allow tests for callable scripts
+    - wrapper functions, e.g. within cli.py allow user focussed tests for
+      command line callable scripts
+    - testing strategy aims to ensure every function has a unit test and in most cases
+      further additional tests, many of these are examples or would be considered over
+      tested to esnure that a wide range of example tests are inclded in the repo
+    - as a training and learning exercise a table below each function or method lists
+      any relevant tests, as follows
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            logger/test_system_log.py
+    # b_integration     test_system_log.py
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # e_performance     N/A
+    # ===================================================================
+
+
 
 Codestyle code quality and code review
 

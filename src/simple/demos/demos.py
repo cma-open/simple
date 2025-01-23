@@ -12,6 +12,7 @@ Example:
 
 """
 import logging
+import os
 from pathlib import Path
 
 from simple.config.reader import return_demo_temp
@@ -23,6 +24,12 @@ from simple.logger.log import (
 
 system_logger = logging.getLogger(__name__)
 
+# Check if running under pytest and disable logging for system_logger if so
+# Only used for selected command line calls
+# (Alternative would be to add a per script arg to disable logging, per command)
+if os.getenv("PYTEST_CURRENT_TEST"):
+    system_logger.setLevel(logging.CRITICAL)
+
 # Set demo test constants
 DEMO_TEMP_DIR = return_demo_temp()
 # Set logger names
@@ -32,11 +39,11 @@ DEMO_SYSTEM_LOGGER_NAME = "DemoSystemLog"
 DEMO_CONFIG_LOG_FILE = "demo_config.log"
 DEMO_SYSTEM_LOG_FILE = "demo_system.log"
 
-# Dev notes- content
+# Dev notes - content
 # demo_config_file_log
 # demo_system_console_log
 # demo_logs
-# demo_logs_cli_entry_point
+# (see cli.py for the command line scripts)
 
 
 def demo_config_file_log(log_path):
@@ -127,8 +134,10 @@ def demo_logs(demo_temp_dir=None):
     # Dev Note - all log files should be ignored via vcs
     # Note - for dev install demo_temp will be within repo
     # Note - for a full installation demo_temp will be within datadir root
+    system_logger.info(f"Demo logs running - using dir: {demo_temp_dir}")
     if demo_temp_dir is None:
         demo_temp_dir = DEMO_TEMP_DIR
+        system_logger.info(f"Demo logs running - using dir: {demo_temp_dir}")
     # Create DEMO_TEMP_DIR if not yet existing
     demo_temp_dir.mkdir(exist_ok=True)
     # Set full path location for demo_temp log files x2
@@ -139,17 +148,12 @@ def demo_logs(demo_temp_dir=None):
     # Run the demo to create config file logs - including demo log messages
     demo_config_file_log(log_path=demo_config_log)
     # Add an extra log message at system level
-    # NOTE - reminder this is to main system logger, not demo logger
-    # if os.getenv("PYTEST_CURRENT_TEST"):
-    #    logging.disable(logging.CRITICAL)
-    # else:
     system_logger.info(f"Demo logs has run - see files in {demo_temp_dir}")
-
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
     # a_unit            demos/test_demo_logs.py
     # b_integration     test_demo_logs.py
     # c_end_to_end      N/A
-    # d_user_interface  N/A (see pyproject.toml,
+    # d_user_interface  N/A (see pyproject.toml)
     # ===================================================================

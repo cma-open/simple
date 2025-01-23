@@ -26,7 +26,6 @@ from simple.logger.log import (
     SYSTEM_LOG_FILE,
     add_system_log_file_handler,
     create_config_logger,
-    create_system_logger,
 )
 
 # Get logger name via module name
@@ -34,18 +33,21 @@ logger_name = logging.getLogger(__name__)
 # Get system logger via package name - already exists via init
 system_logger = logging.getLogger(PACKAGE)
 
-# note - system_logger exist and logs all INFO level and above to console (not DEBUG)
+# note - system_logger exists and logs all INFO level and above to console (not DEBUG)
 
 # CONTENTS - temp dev notes
 # key_directories - list key directories from config
 # verify_directories - check if all key directories exit
 # setup_directories - create key directories on disk
+# read_config_log - return content of the config log file
+# normalize_indentation - remove per line indentation whitespace
+# compare_data - check if new and old data content is the same
+# check_config_log - return true if log needs to be created or updated
+# generate_log_content - read from config files and prepare content string
 # log_config - logs system config to a log file on disk (path set in config file)
 #    config.log
-# setup_system_log - setup main system log file, as set by config file
-#    system.log
-#    DEBUG level and above go to file
 # update_system_log - takes system log by name and adds a log file handler (system.log)
+#    DEBUG level and above go to file
 # system_setup - checks system status and creates dirs and logs if required
 #    acts differently on initial setup vs changed system config status
 #    possible states are: new setup (no dirs, no logs), amended config (dirs, logs_
@@ -55,11 +57,6 @@ system_logger = logging.getLogger(PACKAGE)
 #    note - append status   note - no impact if already exists?
 #    runs log_config to log config to file (config.log) (new file every time)
 #    several messages at DEBUG level to file to log system_steup has run
-
-# options
-# add further status checks within system_setup
-# once system has been installed then config file wil exist?
-# check if config log exist, check if it has changed if it does
 
 
 def key_directories() -> list:
@@ -116,16 +113,11 @@ def setup_directories(key_directories: list) -> None:
     Parameters
     ----------
     str : key_directories
-        List of main directories to be created for the system
+        List of directories to be created for the system
     """
     # Create subdirectories and parent dirs if required
-    print(f"key directories: {key_directories}")
     for subdir in key_directories:
-        # TODO check re remove prints
-        print(subdir)
-        # (datadir_path_obj / subdir).mkdir(parents=True, exist_ok=True) TODO
         subdir.mkdir(parents=True, exist_ok=True)
-
     # ===================================================================
     # Test type and location (training use)
     # ===================================================================
@@ -154,6 +146,14 @@ def read_config_log(file_path):
         return None
     with open(file_path, "r") as file:
         return file.read()
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check and refactor
+    # b_integration     N/A TODO
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def normalize_indentation(data):
@@ -173,6 +173,14 @@ def normalize_indentation(data):
     lines = data.split("\n")
     normalized_lines = [line.lstrip() for line in lines]
     return "\n".join(normalized_lines).strip()
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def compare_data(old_data, new_data):
@@ -201,6 +209,14 @@ def compare_data(old_data, new_data):
     old_data_normalized = normalize_indentation("\n".join(old_data_lines))
     new_data_normalized = normalize_indentation("\n".join(new_data_lines))
     return old_data_normalized != new_data_normalized
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def check_config_log(log_dir_path: Path):
@@ -232,6 +248,14 @@ def check_config_log(log_dir_path: Path):
         # Data has not changed. No need to update the log.
         # No output to the user or to the logs
         return False
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            setup/test_system_setup.py TODO check and refactor
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def generate_log_content(log_dir_path: Path) -> str:
@@ -279,6 +303,14 @@ def generate_log_content(log_dir_path: Path) -> str:
     --  config logged --
     """
     return log_content
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check and refactor
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 # TODO - consider change to take arg for debug level
@@ -310,22 +342,14 @@ def log_config(log_dir_path: Path) -> str | Path:
     return log_for_config
 
     # TODO - tests table
-
-
-def setup_system_log() -> None:
-    """Create the main system logger."""
-    # Get full filepath to system log file, using module constant
-    # add try except to catch if dir does not exist yet
-    try:
-        system_log_path = return_logs_dir() / SYSTEM_LOG_FILE
-        logger = create_system_logger(system_log_path)
-        return logger
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            "System setup must be run before system use (See User Instructions)"
-        )
-
-    # TODO test table
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def update_system_log(logger: str) -> None:
@@ -337,6 +361,14 @@ def update_system_log(logger: str) -> None:
     add_system_log_file_handler(logger=logger, log_path=system_log_path)
 
     # TODO test table
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def system_setup() -> None:
@@ -353,7 +385,6 @@ def system_setup() -> None:
     # Update system log with added log file handler
     # (Log already exists via init)
     update_system_log(logger=system_logger)
-    # START
 
     # Set log_dir_path from config settings (config.ini)
     log_dir_path = return_logs_dir()
@@ -362,32 +393,36 @@ def system_setup() -> None:
     if check_config_log(log_dir_path):
         log_config(log_dir_path)
 
-    # Check and move log messages within the main functions to manage log outputs
-    # Log messages will be frequently called, therefore set to debug, for file
-
     # LOGGING NOTE
     # Important logs occur within the called contained functions
     # This function has different impact when run in a new installation.
-    # Because constantyl called in init, no log messages in this function.
+    # Because constantly called in init, no log messages in this function.
 
-    # logger_name.debug(f"System log file created or updated in {return_logs_dir()}")
-    # logger_name.debug(f"System log: {logger_name}")
-    # logger_name.debug("System setup has run")
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            TODO check
+    # b_integration     N/A TODO >>>>>>>>
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 def get_user_data_dir():
-    """Get user data dir."""
-    appname = "MyPackage"
-    appauthor = "MyCompany"
+    """Get user data dir via platformdirs."""
+    appname = PACKAGE
+    appauthor = metadata(PACKAGE)["Author"]
     return user_data_dir(appname, appauthor)
 
 
 def write_installation_log(version):
     """Write details to installation log file."""
+    # Illustrates using log to record details inc previous installed version.
     data_dir = get_user_data_dir()
     os.makedirs(data_dir, exist_ok=True)
+    # Set fill path to log file
     log_file = os.path.join(data_dir, "install_log.json")
-
+    # Set content to be logged
     log_data = {
         "installed_version": version,
         "install_time": datetime.datetime.now().isoformat(),
@@ -395,7 +430,7 @@ def write_installation_log(version):
         "System installed as": check_install_status(display=True),
         "Package dir": str(PACKAGE_DIR),
     }
-
+    # Note previous logged version where relevant.
     if os.path.exists(log_file) and os.path.getsize(log_file) > 0:
         try:
             with open(log_file, "r") as f:
@@ -403,7 +438,6 @@ def write_installation_log(version):
             log_data["previous_version"] = existing_data.get("installed_version")
         except (IOError, json.JSONDecodeError) as e:
             print(f"Error reading existing log file: {e}")
-
     try:
         with open(log_file, "w") as f:
             json.dump(log_data, f, indent=4)
@@ -429,39 +463,28 @@ def print_installation_log():
 
 def get_platformdirs():
     """Get platformdirs paths."""
+    # Temp function used to illustrate platformdirs.
     appname = PACKAGE
     appauthor = metadata(PACKAGE)["Author"]
     print(user_data_dir(appname, appauthor))
     print(user_cache_dir(appname, appauthor))
     print(user_config_dir(appname, appauthor))
     print(user_log_dir(appname, appauthor))
+    # ===================================================================
+    # Test type and location (training use)
+    # ===================================================================
+    # a_unit            test_system_setup.py
+    # b_integration
+    # c_end_to_end      N/A
+    # d_user_interface  N/A
+    # ===================================================================
 
 
 if __name__ == "__main__":
+    # TODO revisit and remove
     get_platformdirs()
     package_version = version(PACKAGE)
     write_installation_log(package_version)
     print_installation_log()
 
-# start
-# options
-# copy config to setup
-# ensure localy write f last version installed and current version
-# also previous log path vs current log path
-# then check those ans trigger re setup
-
-# other quick way to amend system_setup()
-# change so that only runs if log file in those locations dotn exist,
-# otherwide use them
-# think through re config though,
-# consider using checksum or similar to compare content of eg config.log
-# to check if it changed?
-
-# also re-visit and update section on loging methods
-# do a quick web search and state how logs sit with the functinos where
-# they are enacted and only limited
-# additional logs in the "calling" scripts to ensure thye are easy to test,
-# mock and manage
-# e.g. log at thr gith place, so within functinos
-# wrapper or calling fucntino just log the approx start, or process flow,
-# or end of a workflow
+#

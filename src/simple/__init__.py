@@ -12,14 +12,14 @@ from simple.setup.system_setup import system_setup
 # Set logger name - at this level it is same as package name
 logger_name = logging.getLogger(__name__)
 # Set initial logging level (required)
-# All messsages from DEBUG above are shown (DEBUG, INFO, WARN, ERROR, CRITICAL
+# All messsages from DEBUG above are shown (DEBUG, INFO, WARN, ERROR, CRITICAL)
 logger_name.setLevel(level=logging.DEBUG)
 # Set default console output logger (allows initial general logging to terminal)
 add_system_console_handler(logger=logger_name)
 
 # TODO check potn for in memory log of post setup / pre app run
 # Run system setup to create required directories and log files
-# checks if system directories exist (verify_directories), creates if not
+# checks if system directories exist (verify_directories), creates dirs if not
 # logs to main system console log to inform user if creating directories
 # also checks if config log created or if config settigns have changed
 system_setup()

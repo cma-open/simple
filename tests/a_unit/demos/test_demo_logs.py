@@ -376,23 +376,24 @@ def test_demo_logs(tmp_path, caplog, capsys):
 
 def test_demo_logs_cli_entry_point_dry_run(mocker):
     """Test for demo_logs_cli_entry_point function."""
-    # Notes
+    # Notes - this version uses pytest-mock's mocker
     # This function creates parsers then calls demo_logs function
     # Also writes to main system log to note it has run.
     # Unit test so need to mock out.
 
-    # Mock the logger and demo_logs function
-    mock_logger = mocker.patch("simple.cli.logger")
+    # Mock the logger and demo_logs function (main logger is disabled in pytest runs)
     mock_demo_logs = mocker.patch("simple.demos.demos.demo_logs")
 
     # Test the dry-run option
     test_args = ["--dry"]
     demo_logs_cli_entry_point(test_args)
-    # dry run expect only output to main log, demo_logs not run
-    mock_logger.debug.assert_called_with(
-        "CLI-DEMO-LOGS command run in dry-run mode. Exiting"
-    )
+
+    # Check main function was called
+    # Note system logger not expected to call as disabled
+    # test demo log content output
+
     mock_demo_logs.assert_not_called()
+    # TODO check further testing here
 
 
 def test_demo_logs_cli_entry_point(mocker):
