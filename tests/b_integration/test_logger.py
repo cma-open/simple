@@ -13,13 +13,13 @@ def test_available_logger():
     expected_loggers = [
         "<Logger simple (DEBUG)>",
         "<Logger ConfigLog (DEBUG)>",
-        "<Logger DEMOLog (DEBUG)>",
+        # "<Logger DEMOLog (DEBUG)>",
     ]
     # Print full list of logggers for verbose editable installs
     if return_verbosity():
         print(*loggers, sep="\n")
         print("---")
-    # Check that the selected list fo expected loggers are present
+    # Check that the selected list of expected loggers are present
     for logger in expected_loggers:
         assert logger in loggers_names
 

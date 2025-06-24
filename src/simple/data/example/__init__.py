@@ -1,1 +1,1 @@
-"""Example data subpackage - for testing and development."""
+"""Example data file based subpackage - for testing and development."""

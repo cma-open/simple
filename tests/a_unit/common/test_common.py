@@ -5,7 +5,12 @@ from unittest.mock import patch
 
 import pytest
 
-from simple.common.common import StatusException, check_install_status, clean_directory
+from simple.common.common import (
+    StatusException,
+    check_install_status,
+    clean_directory,
+    debug_loggers,
+)
 from simple.config.reader import return_verbosity
 
 # List of data files generated and used within the system.
@@ -93,3 +98,23 @@ def test_check_install_status_bad_path(mock_find_spec):
     # Get install status, with mock applied
     with pytest.raises(StatusException):
         check_install_status()
+
+
+def test_debug_loggers(capsys):
+    """List current available loggers for use in debugging."""
+    # Kept for training use as useful to show list of loggers by name
+    debug_loggers()
+    # Capture prints
+    captured = capsys.readouterr()
+    # Split returned strinng into strings by newlines
+    logger_lines = captured.out.splitlines()
+    # Check that each printed line refers to a Logger
+    for logger in logger_lines:
+        assert "Logger" in logger
+    # Expect at least three seperate loggers
+    number_loggers = len(captured.out.splitlines())
+    print(f"There are {number_loggers} Loggers in use by the system")
+    assert number_loggers > 3
+    # Run debug loggers again so that print also shows in main test report
+    # Required due to capturing of first output above for use in the test
+    debug_loggers()

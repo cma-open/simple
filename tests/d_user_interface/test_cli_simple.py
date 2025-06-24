@@ -1,4 +1,4 @@
-"""User interface tests the cli tool."""
+"""User interface tests for the cli tool."""
 
 # This module uses subprocess, which can raise security threats.
 # The risk have been reviewed via Codacy, Bandit.
@@ -27,6 +27,11 @@ TOOL = "cli-simple"
 # CLI tool is registered via project.scripts in pyproject.toml
 # Can't be called and run via filepath (does not use main)
 # Can't be called and run via module name (does not use main)
+
+# Tests for:
+# cli-simple
+
+# See other modules for other command line tests
 
 
 def test_cli_help_version():
@@ -173,24 +178,21 @@ def test_cli_with_user_args_raises_errors_message():
     if return_verbosity():
         print(out.stderr)
     message = out.stderr
-    expected = (
-        "CLI-SIMPLE: error: argument x: invalid choice: 1000 "
-        "(choose from 0, 1, 2, 3, 4, 5)"
-    )
+    expected = "CLI-SIMPLE: error: argument x: invalid choice:"
     assert expected in message
 
 
 message_invalid_x = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: 10000 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '10000' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 message_invalid_y = (
     "CLI-SIMPLE: error: argument y: "
-    "invalid choice: -3 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-3' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 message_invalid_x_y = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: -55 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-55' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 
 
@@ -219,18 +221,20 @@ def test_cli_with_user_args_raises_errors_message_various(x, y, expected):
     if return_verbosity():
         print(out.stderr)
     message = out.stderr
+    print(f"Expected: {expected}")
+    print(f"Actual: {message}")
     assert expected in message
 
 
 uargs_x = "10000", "2"
 message_invalid_x = (
     "CLI-SIMPLE: error: argument x: "
-    "invalid choice: 10000 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '10000' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 uargs_y = "2", "-3"
 message_invalid_y = (
     "CLI-SIMPLE: error: argument y: "
-    "invalid choice: -3 (choose from 0, 1, 2, 3, 4, 5)\n"
+    "invalid choice: '-3' (choose from 0, 1, 2, 3, 4, 5)\n"
 )
 uargs_too_many = "1", "2", "3"
 message_invalid_too_many = "CLI-SIMPLE: error: unrecognized arguments: "

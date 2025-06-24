@@ -24,32 +24,45 @@ dynamic = ["version"]  # enable dynamic version numbering via seuptools_scm
 #Repository = "https://github.com/cma-open/simple"
 #Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
 
-
-
-# TODO - to review later
-#[project.optional-dependencies]
-#pdf = ["ReportLab>=1.2", "RXP"]
-#rest = ["docutils>=0.3", "pack ==1.1, ==1.3"]
-
 # Set all command line scripts
 # These are added as command line options once the system is installed
 [project.scripts]
 # format is: my-script = "my_package.module:function"
 
-# Tested + working - tools using argparse
-cli-simple  = "simple.cli:cli_entry_point"  # uses argparse
-create-data-options = "simple.cli:cli_data"  # uses argparse
+# Tested + working - (tools using argparse)
+cli-simple  = "simple.cli:cli_entry_point"
+create-data-options = "simple.cli:cli_data"
+cli-demo-logs = "simple.cli:demo_logs_cli_entry_point"
+# ---
+demo-logs = "simple.cli:demo_logs_main"  # (no argarse)
+# ---
+# Tested + working - (no use of argparse)
+system-version = "simple.status.checks:show_version"
+show-loggers = "simple.status.checks:show_loggers"
+confirm-config = "simple.status.checks:confirm_config"
+create-data = "simple.netcdf.data:main"
+clean = "simple.io.io:main"
 
-# Tested + working - no use of argparse
-system-version = "simple.status.checks:show_version"  # no argparse
-show-loggers = "simple.status.checks:show_loggers"  # no argparse
-confirm-config = "simple.status.checks:confirm_config"  # no argparse
 
-# Tested + working
+# These are main system tools with user input, tested via these tests:
 
-create-data = "simple.netcdf.data:main"  # no argparse
-clean = "simple.io.io:main"  # no argparse
-demo-logs = "simple.demos.demos:demo_logs"  # no argparse
+# ===================================================================
+# Test type and location (training use)
+# ===================================================================
+#                           c_end_to_end      d_user_interface
+# cli-simple                     ?            test_cli_simple.py
+# create-data-options            ?            test_cli_data_creation.py
+# cli-create-data-options  ??
+# cli-demo-logs                 N/A           test_cli_demo.py
+
+# system-version                ?             test_commands.py
+# show-loggers                  ?             test_commands.py
+# confirm-config                ?             test_commands.py
+# create-data                   ?             test_commands.py
+# clean                         ?             test_commands.py
+#
+# demo-logs                    N/A            test_cli_demo.py
+# ===================================================================
 
 
 [tool.setuptools_scm]

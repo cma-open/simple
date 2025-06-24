@@ -17,11 +17,15 @@ echo "Current working directory: ${PWD}"
 
 echo "Move to test dir and run pytest: ${TESTS_DIR}"
 cd "${TESTS_DIR}"/a_unit/logger
-#pytest test_config_log.py --tb=long -vrA
+pytest test_config_log.py --tb=long -vrA
 pytest test_system_log.py --tb=long -vrA
 
 echo "Move to test dir and run pytest: ${TESTS_DIR}"
 cd "${TESTS_DIR}"/b_integration
+
+pytest test_config_log.py --tb=long -vrA
+pytest test_system_log.py --tb=long -vrA
+
 pytest test_logger.py --tb=long -vrA
 
 #######################################################################################

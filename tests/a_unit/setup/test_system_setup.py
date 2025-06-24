@@ -1,7 +1,10 @@
 """Tests for the system setup module."""
 
+from unittest.mock import patch
 
-from simple.setup.system_setup import setup_directories
+import pytest
+
+from simple.setup.system_setup import get_platformdirs, setup_directories
 
 # log_config, setup_system_log
 
@@ -82,19 +85,46 @@ def test_log_config():
     # START HERE >>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-def test_setup_system_log():
-    """Test for setup_system_log."""
-    # setup_system_log()
-    # needs thought here
-    # does this work?
-    # or move setup_system_log to init?
-    # however its difficult because it has to read from config to work ?
-    # check init
-
-
 def test_update_system_log():
     """Test for update_system_log."""
 
 
 def test_system_setup():
     """Test system setup."""
+
+
+@pytest.fixture
+def mock_metadata():
+    """Test mock fixture."""
+    with patch("simple.setup.system_setup.metadata") as mock:
+        mock.return_value = {"Author": "Test Author"}
+        yield mock
+
+
+@pytest.fixture
+def mock_platformdirs():
+    """Test mock fixture."""
+    with patch("simple.setup.system_setup.user_data_dir") as mock_data, patch(
+        "simple.setup.system_setup.user_cache_dir"
+    ) as mock_cache, patch(
+        "simple.setup.system_setup.user_config_dir"
+    ) as mock_config, patch(
+        "simple.setup.system_setup.user_log_dir"
+    ) as mock_log:
+        mock_data.return_value = "/mock/data/dir"
+        mock_cache.return_value = "/mock/cache/dir"
+        mock_config.return_value = "/mock/config/dir"
+        mock_log.return_value = "/mock/log/dir"
+
+        yield mock_data, mock_cache, mock_config, mock_log
+
+
+def test_get_platformdirs(mock_metadata, mock_platformdirs, capsys):
+    """Test get_platformdirs."""
+    # Call get_platformdirs func
+    get_platformdirs()
+    captured = capsys.readouterr()
+    assert "/mock/data/dir" in captured.out
+    assert "/mock/cache/dir" in captured.out
+    assert "/mock/config/dir" in captured.out
+    assert "/mock/log/dir" in captured.out

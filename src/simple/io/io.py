@@ -27,8 +27,9 @@ def main():
 # ==================================================================================
 # Test type and location (training use)
 # ----------------------------------------------------------------------------------
-# a_unit  test_io.py
+# a_unit  io/test_io.py
 # b_integration  test_io.py
 # c_end_to_end  n/a
 # d_user_interface  n/a
+# e_performance io/test_io.py
 # ==================================================================================

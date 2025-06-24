@@ -58,7 +58,7 @@ def test_cli_entry_point(mock_calculate, capsys):
 
 
 @pytest.fixture
-def create_d(netcdf, debug=None):
+def create_d(netcdf):
     """Create a netcdf data file."""
     # Set filename, mode and type
     ds = nc.Dataset(netcdf, mode="w", format="NETCDF4")
@@ -91,8 +91,6 @@ def create_d(netcdf, debug=None):
     xval = np.linspace(0.5, 5.0, 10)
     yval = np.linspace(0.5, 5.0, 10)
     value[1, :, :] = np.array(xval.reshape(-1, 1) + yval)  # linear gradient values
-    if debug:
-        print("var size after adding first data", value.shape)
     ds.close()
 
 
@@ -106,7 +104,7 @@ def mock_add_metadata(netcdf):
         ds.history = "Created " + today.strftime("%d/%m/%y")
 
 
-def mock_set_cf_convention_level(netcdf, cf=None):
+def mock_set_cf_convention_level(netcdf, cf_version=None):
     """Add cf convention setting."""
     with nc.Dataset(netcdf, mode="a") as ds:  # note append mode
         ds.Conventions = "cf:mocked"

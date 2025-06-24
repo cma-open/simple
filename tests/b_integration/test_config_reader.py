@@ -13,9 +13,27 @@ from simple.config.reader import (
 from simple.definitions import RESOURCES
 
 TEST_CONFIGFILE = files(RESOURCES) / "test_config.ini"
+GITHUB_CONFIGFILE = files(RESOURCES) / "github_config.ini"
 
 # Note these integration tests run against static test files
 # This allows full process to be tested
+
+# Contents
+# ========
+# return_datadir
+# return_outputs
+# return_inputs
+# return_scratch
+# return_demo_temp
+# return_logs_dir
+# return_log_level
+# return_datadir_root
+# return_verbosity (for logs)
+# log_config
+
+
+# return_datadir
+# =============
 
 
 # Patch out functions at the location used, not where defined
